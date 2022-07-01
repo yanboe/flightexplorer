@@ -7,6 +7,6 @@ load_dotenv(path.join(basedir, ".env"))
 
 class Config:
     # Database
-    SQLALCHEMY_DATABASE_URI = environ.get("SQLALCHEMY_DATABASE_URI")
-    #DATABASE_URL = environ.get("DATABASE_URL").replace("postgres://", "postgresql://")
+    #SQLALCHEMY_DATABASE_URI = environ.get("SQLALCHEMY_DATABASE_URI")
+    DATABASE_URL = environ.get("DATABASE_URL").replace("postgres://", "postgresql://")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
