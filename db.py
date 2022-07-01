@@ -5,7 +5,7 @@ from os import environ
 
 
 #uri = environ.get("SQLALCHEMY_DATABASE_URI")
-uri = environ.get("DATABASE_URL")
+uri = environ.get("DATABASE_URL").replace("postgres://", "postgresql://")
 engine = create_engine(uri)
 Session = sessionmaker(engine)
 Base = declarative_base()
