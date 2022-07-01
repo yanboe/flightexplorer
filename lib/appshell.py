@@ -1,5 +1,5 @@
 import dash_mantine_components as dmc
-from dash import Input, Output, html, dcc, page_container
+from dash import html, dcc, page_container
 from dash_iconify import DashIconify
 from datetime import date
 
@@ -22,12 +22,13 @@ def create_header():
                                                         dmc.ThemeIcon(
                                                             DashIconify(
                                                                 icon="cil:airplane-mode",
-                                                                width=22
+                                                                width=22,
+                                                                rotate=1
                                                             ),
                                                             radius=30,
                                                             size=36,
                                                             variant="light",
-                                                            color="indigo"
+                                                            color="blue"
                                                         ),
                                                         dmc.Text("Flight Planner", size="xl", color="gray"),
                                                     ]
@@ -43,12 +44,13 @@ def create_header():
                                                         dmc.ThemeIcon(
                                                             DashIconify(
                                                                 icon="cil:airplane-mode",
-                                                                width=22
+                                                                width=22,
+                                                                rotate=1
                                                             ),
                                                             radius=30,
                                                             size=36,
                                                             variant="light",
-                                                            color="indigo"
+                                                            color="blue"
                                                         ),
                                                         dmc.Text("Flight Planner", size="xl", color="gray"),
                                                     ]
@@ -81,23 +83,7 @@ def create_header():
                                             position="bottom",
                                         ),
                                         href="#",
-                                    ),
-                                    html.A(
-                                        dmc.Tooltip(
-                                            dmc.ThemeIcon(
-                                                DashIconify(
-                                                    icon="bi:discord",
-                                                    width=22,
-                                                ),
-                                                radius=30,
-                                                size=36,
-                                                variant="outline",
-                                            ),
-                                            label="Discord",
-                                            position="bottom",
-                                        ),
-                                        href="#",
-                                    ),
+                                    )
                                 ],
                                 position="right",
                                 align="center",
@@ -213,6 +199,7 @@ def create_form():
                                         size="md",
                                         value="afternoon",
                                         icon=[DashIconify(icon="akar-icons:clock", width=25)],
+                                        maxDropdownHeight=500,
                                         id="dep_time"
                                     )
                                 ]
@@ -346,4 +333,3 @@ def create_appshell(nav_data):
         withGlobalStyles=True,
         withNormalizeCSS=True
     )
-

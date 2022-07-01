@@ -35,6 +35,7 @@ layout = dmc.LoadingOverlay(
         # hidden sort by dropdown
         html.Div(children=sort_select, style={"display": "none"})
     ],
+    loaderProps={"variant": "oval", "color": "blue", "size": "xl"},
 )
 
 dash.register_page(
@@ -246,7 +247,6 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
                             xs=6
                         ),
                     ],
-
                 )]
 
                 # create accordion content
@@ -256,7 +256,7 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
                         dmc.Timeline(
                             [
                                 dmc.TimelineItem(
-                                    dmc.Text(("Travel time: ", row.f1_duration), color="dimmed"),
+                                    dmc.Text(("Flight duration: ", row.f1_duration), color="dimmed"),
                                     lineVariant="dotted",
                                     title=(row.f1_time_from_str, " · ", row.f1_airport_from_long),
                                 ),
@@ -266,6 +266,9 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
                                     title=(row.f1_time_to_str, " · ", row.f1_airport_to_long),
                                 )
                             ],
+                            bulletSize=22,
+                            lineWidth=3,
+                            active=1
                         ),
 
                         # Layover information
@@ -277,7 +280,7 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
                         dmc.Timeline(
                             [
                                 dmc.TimelineItem(
-                                    dmc.Text(("Travel time: ", row.f2_duration), color="dimmed"),
+                                    dmc.Text(("Flight duration: ", row.f2_duration), color="dimmed"),
                                     lineVariant="dotted",
                                     title=(row.f2_time_from_str, " · ", row.f2_airport_from_long),
                                 ),
@@ -287,6 +290,9 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
                                     title=(row.f2_time_to_str, " · ", row.f2_airport_to_long),
                                 )
                             ],
+                            bulletSize=22,
+                            lineWidth=3,
+                            active=1
                         )
                     ],
                     px=0,
@@ -294,6 +300,8 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
                 )
 
             else:
+                continue
+                """
                 accordion_label = row.arr_time
                 accordion_content = dmc.Timeline(
                     [
@@ -311,6 +319,7 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
                     active=1,
                     color="green"
                 )
+                """
 
             # add accordion item
             accordion_item = dmc.AccordionItem(children=accordion_content, label=accordion_label)
