@@ -37,7 +37,7 @@ def get_sql(origin, destination, start, end, stop_duration):
         ).\
         where(
           a.firstseen.between(start, end),
-          a.destination == destination,
+          a.destination.in_(destination),
           a.origin.in_(origin)
         ).\
         order_by(
@@ -60,7 +60,7 @@ def get_sql(origin, destination, start, end, stop_duration):
             a.lastseen + func.cast(concat(1, ' HOURS'), Interval),
             a.lastseen + func.cast(concat(stop_duration, ' HOURS'), Interval)
           ),
-          b.destination == destination,
+          b.destination.in_(destination),
           a.origin.in_(origin)
         ).\
         order_by(
@@ -94,7 +94,7 @@ def get_sql(origin, destination, start, end, stop_duration):
             b.lastseen + func.cast(concat(1, ' HOURS'), Interval),
             b.lastseen + func.cast(concat(stop_duration, ' HOURS'), Interval)
           ),
-          c.destination == destination,
+          c.destination.in_(destination),
           a.origin.in_(origin)
         ).\
         order_by(

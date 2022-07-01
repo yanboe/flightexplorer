@@ -120,6 +120,7 @@ def create_header():
 def create_form():
     return dmc.Container(
         [
+
             dmc.Grid(
                 [
                     # Airport From
@@ -160,6 +161,7 @@ def create_form():
                                         limit=10,
                                         placeholder="Where to?",
                                         size="lg",
+                                        maxDropdownHeight=500,
                                         id="airport_to"
                                     )
                                 ]
@@ -199,7 +201,7 @@ def create_form():
                         [
                             html.Div(
                                 [
-                                    dmc.MultiSelect(
+                                    dmc.Select(
                                         data=[
                                             {"label": "Anytime", "value": "anytime"},
                                             {"label": "00:00 - 05:59", "value": "night"},
@@ -207,17 +209,17 @@ def create_form():
                                             {"label": "12:00 - 17:59", "value": "afternoon"},
                                             {"label": "18:00 - 23:59", "value": "evening"},
                                         ],
-                                        placeholder="Departure Time",
+                                        label="Departure Time",
                                         size="md",
-                                        maxSelectedValues=1,
+                                        value="afternoon",
                                         icon=[DashIconify(icon="akar-icons:clock", width=25)],
                                         id="dep_time"
                                     )
                                 ]
                             ),
                         ],
-                        lg=4,
-                        md=4,
+                        lg=6,
+                        md=6,
                         sm=6,
                         xs=12
                     ),
@@ -226,24 +228,24 @@ def create_form():
                         [
                             html.Div(
                                 [
-                                    dmc.MultiSelect(
+                                    dmc.Select(
                                         data=[
                                             {"label": "Any number of stops", "value": "9"},
                                             {"label": "Nonstop only", "value": "0"},
                                             {"label": "1 stop or less", "value": "1"},
                                             {"label": "2 stops or less", "value": "2"},
                                         ],
-                                        placeholder="Stops",
+                                        label="Stops",
                                         size="md",
-                                        maxSelectedValues=1,
+                                        value="9",
                                         icon=[DashIconify(icon="ic:round-connecting-airports", width=25)],
                                         id="max_stops",
                                     )
                                 ]
                             ),
                         ],
-                        lg=4,
-                        md=4,
+                        lg=6,
+                        md=6,
                         sm=6,
                         xs=12
                     ),
@@ -252,7 +254,7 @@ def create_form():
                         [
                             html.Div(
                                 [
-                                    dmc.Text("Flight duration", color="dimmed"),
+                                    dmc.Text("Flight duration", weight=500),
                                     dmc.Slider(
                                         min=0,
                                         max=48,
@@ -269,8 +271,8 @@ def create_form():
                                 ]
                             )
                         ],
-                        lg=4,
-                        md=4,
+                        lg=6,
+                        md=6,
                         sm=6,
                         xs=12
                     ),
@@ -279,7 +281,7 @@ def create_form():
                         [
                             html.Div(
                                 [
-                                    dmc.Text("Layover duration (per layover)", color="dimmed"),
+                                    dmc.Text("Layover duration (per stop)", weight=500),
                                     dmc.Slider(
                                         min=0,
                                         max=24,
@@ -296,8 +298,8 @@ def create_form():
                                 ]
                             )
                         ],
-                        lg=4,
-                        md=4,
+                        lg=6,
+                        md=6,
                         sm=6,
                         xs=12
                     )
