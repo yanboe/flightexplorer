@@ -1,0 +1,7 @@
+html, body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.mantine-Accordion-content {
+    border-top: 1px solid rgb(222, 226, 230);
+}
