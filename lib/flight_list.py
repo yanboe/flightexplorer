@@ -6,7 +6,7 @@ from db import Session
 from models import Flight
 import numpy as np
 import warnings
-warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
+warnings.simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 
 
 """
