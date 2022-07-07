@@ -61,7 +61,7 @@ def create_header():
                                         ),
                                     ],
                                     href="#",
-                                    style={"paddingTop": 5, "textDecoration": "none"},
+                                    style={"textDecoration": "none"},
                                 ),
                             ),
                             # Icons
@@ -87,18 +87,19 @@ def create_header():
                                 ],
                                 position="right",
                                 align="center",
-                                spacing="xl",
+                                spacing="xl"
                             ),
                         ],
                         position="apart",
                         align="flex-start",
+                        style={"paddingTop": 5}
                     ),
                 ],
                 fluid=True,
             )
         ],
         height=70,
-        # fixed=True,
+        fixed=True,
         p="md",
     )
 
@@ -300,7 +301,7 @@ def create_form():
                 }
             )
         ],
-        mt="30px"
+        mt="100px"
     )
 
 
@@ -308,17 +309,7 @@ def create_appshell(nav_data):
     return dmc.MantineProvider(
         [
             create_header(),
-            create_form(),
-            dcc.Location(id="url"),
-            html.Div(
-                [
-                    dmc.Container(
-                        [
-                            page_container
-                        ],
-                    )
-                ],
-            )
+            page_container
         ],
         theme={
             "fontFamily": "Roboto, sans-serif",

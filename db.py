@@ -3,8 +3,6 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from os import environ
 
-
-#uri = environ.get("SQLALCHEMY_DATABASE_URI")
 uri = environ.get("DATABASE_URL").replace("postgres://", "postgresql://")
 engine = create_engine(uri)
 Session = sessionmaker(engine)
