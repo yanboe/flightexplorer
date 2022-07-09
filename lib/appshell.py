@@ -89,6 +89,7 @@ def create_header():
                                             position="bottom",
                                         ),
                                         href="https://github.com/yanboe/flightexplorer",
+                                        target="_blank"
                                     )
                                 ],
                                 position="right",
