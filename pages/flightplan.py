@@ -216,7 +216,7 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
             # Title/Subtitle
             html.Div(
                 [
-                    dmc.Text("Results", style={"fontSize": 30, "fontWeight": 400}),
+                    dmc.Text("Best flights", weight=500, style={"fontSize": 30}),
                     dmc.Text("Only the first 10 flights are shown.", color="dimmed", )
                 ]
             ),

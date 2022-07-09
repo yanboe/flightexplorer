@@ -172,6 +172,15 @@ def create_navbar():
                     ),
                     dmc.Divider(style={"marginBottom": 20, "marginTop": 20}),
 
+                    # /faq/
+                    dcc.Link(
+                        [
+                            dmc.Text("FAQ", size="sm", color="gray")
+                        ],
+                        href="/faq/",
+                        style={"textDecoration": "none"}
+                    ),
+
                     # /about/
                     dcc.Link(
                         [
@@ -185,7 +194,7 @@ def create_navbar():
                 position="left",
                 spacing="sm",
                 direction="column",
-                style={"paddingLeft": 30, "paddingRight": 20},
+                style={"paddingLeft": 30, "paddingRight": 30},
             ),
         ],
         fixed=True,

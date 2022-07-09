@@ -145,8 +145,8 @@ def get_flightindex(airport_from, airport_to, flight_date, dep_time,
             # Title/Subtitle
             html.Div(
                 [
-                    dmc.Text("Results", style={"fontSize": 30, "fontWeight": 400}),
-                    dmc.Text("Only the first 10 flights are shown.", color="dimmed", )
+                    dmc.Text("Best airports", weight=500, style={"fontSize": 30}),
+                    dmc.Text("Switch between the tabs to explore more.", color="dimmed")
                 ]
             ),
         ],
@@ -159,17 +159,24 @@ def get_flightindex(airport_from, airport_to, flight_date, dep_time,
     subcontent = dmc.Tabs(
         [
             dmc.Tab(
+                [
+                    dmc.Text("Airport ranking", weight=400, style={"fontSize": 26, "marginBottom": 15})
+                ],
                 label="Airports",
                 icon=[DashIconify(icon="clarity:view-list-line", width=22)]
             ),
             dmc.Tab(
-                graphs,
+                [
+                    dmc.Text("Visualizations", weight=400, style={"fontSize": 26, "marginBottom": 15}),
+                    graphs,
+                ],
                 label="Visualizations",
                 icon=[DashIconify(icon="clarity:line-chart-line", width=22)]
             )
         ],
         grow=True,
-        position="center"
+        position="center",
+        tabPadding="xl"
     )
 
     # add subcontent

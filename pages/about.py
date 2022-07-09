@@ -1,7 +1,51 @@
 import dash
-from dash import html
+import dash_mantine_components as dmc
 
-layout = html.Div("Coming soon...")
+from dash import html, dcc
+
+layout = html.Div(
+    [
+        dmc.Center(
+            [
+                dmc.Group(
+                    [
+                        html.A(
+                            [
+                                dmc.Tooltip(
+                                    [
+                                        dmc.Avatar(
+                                            [
+
+                                            ],
+                                            size="xl",
+                                            radius="md"
+                                        ),
+                                    ],
+                                    label="View profile on GitHub",
+                                    position="bottom",
+                                    withArrow=True,
+                                    arrowSize=3
+                                )
+                            ],
+                            href="https://github.com/yanboe/",
+                            target="_blank"
+                        ),
+                        html.Div(
+                            [
+                                dmc.Text("Software Engineer & Student", size="xs", transform="uppercase", weight=700, color="dimmed"),
+                                dmc.Text("Yannik Böni", size="lg", weight=500),
+                                dmc.Text("yannik.boeni@stud.fhgr.ch", size="xs", color="dimmed"),
+                            ]
+                        )
+                    ],
+                    position="center",
+                    direction="row",
+                    noWrap=True
+                )
+            ],
+        )
+    ]
+)
 
 dash.register_page(
     __name__,

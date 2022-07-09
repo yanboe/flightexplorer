@@ -39,10 +39,10 @@ def create_figure():
 def create_graph_dummy(graph_id):
     return dmc.Paper(
         [
-            dmc.Text(id=("fi_graph_title_" + str(graph_id)), style={"fontSize": 30, "fontWeight": 400}),
+            dmc.Text(id=("fi_graph_title_" + str(graph_id)), weight=300, style={"fontSize": 26}),
             dcc.Graph(figure=create_figure(), id=("fi_graph_" + str(graph_id)), responsive=True),
         ],
-        p="xl",
+        p="lg",
         radius="sm",
         withBorder=True,
         mb=15

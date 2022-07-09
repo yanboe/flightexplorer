@@ -9,6 +9,7 @@ load_dotenv()
 app = Dash(
     __name__,
     use_pages=True,
+    update_title=None,
     meta_tags=[
         {"name": "viewport", "content": "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"}
     ]

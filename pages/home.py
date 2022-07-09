@@ -24,7 +24,7 @@ layout = html.Div(
             style={"marginTop": 30, "marginBottom": 20}
         ),
 
-        # Cards for "explore flights" and "compare airports"
+        # Paper for "explore flights" and "compare airports"
         dmc.Container(
             [
                 dmc.Grid(
@@ -46,6 +46,7 @@ layout = html.Div(
                                                         ),
                                                         dmc.Text(
                                                             "Explore Flights",
+                                                            weight=500,
                                                             style={"marginTop": 15, "marginBottom": 5}
                                                         ),
                                                         dmc.Text(
@@ -107,6 +108,7 @@ layout = html.Div(
                                                         ),
                                                         dmc.Text(
                                                             "Compare Airports",
+                                                            weight=500,
                                                             style={"marginTop": 15, "marginBottom": 5}
                                                         ),
                                                         dmc.Text(
@@ -155,7 +157,7 @@ layout = html.Div(
             size="lg"
         ),
 
-        # Card for "about"
+        # Paper for additional information
         dmc.Container(
             [
                 dmc.Grid(
@@ -164,21 +166,54 @@ layout = html.Div(
                             [
                                 dmc.Paper(
                                     [
-                                        "Meaningful text"
+                                        dmc.Group(
+                                            [
+                                                dmc.Text(
+                                                    "Explain what this website is about",
+                                                    weight=500,
+                                                    size="xl",
+                                                    style={"marginTop": 15, "marginBottom": 5}
+                                                ),
+                                                dmc.Text(
+                                                    "Explain some more",
+                                                    size="md",
+                                                    style={"lineHeight": 1.6, "marginBottom": 30}
+                                                ),
+                                                dmc.Text(
+                                                    [
+                                                        "Still have questions? Head over to the ",
+                                                        dcc.Link(
+                                                            "FAQ",
+                                                            href="/faq/",
+                                                            style={
+                                                                "textDecoration": "none",
+                                                                "color": "#1c7ed6"
+                                                            }
+                                                        ),
+                                                        " page!"
+                                                    ],
+                                                    size="sm",
+                                                    style={"lineHeight": 1.6, "marginBottom": 10}
+                                                ),
+                                            ],
+                                            direction="column",
+                                            spacing=0,
+                                        )
                                     ],
                                     p="lg"
                                 )
                             ],
                             lg=10,
                             md=10,
-                            sm=10,
-                            xs=10,
+                            sm=12,
+                            xs=12,
                             style={
                                 "border": "1px solid rgb(222, 226, 230)",
                                 "borderRadius": "4px",
                                 "padding": 0,
                                 "display": "flex",
                                 "margin": 15,
+                                "marginTop": 23,
                             }
                         )
                     ],
