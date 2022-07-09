@@ -1,4 +1,5 @@
 import dash_mantine_components as dmc
+
 from dash import html, dcc, page_container
 from dash_iconify import DashIconify
 from datetime import date
@@ -13,56 +14,61 @@ def create_header():
                         [
                             # Logo/Page Name
                             dmc.Center(
-                                dcc.Link(
-                                    [
-                                        dmc.MediaQuery(
-                                            [
-                                                dmc.Group(
-                                                    [
-                                                        dmc.ThemeIcon(
-                                                            DashIconify(
-                                                                icon="cil:airplane-mode",
-                                                                width=22,
-                                                                rotate=1
+                                [
+                                    dcc.Link(
+                                        [
+                                            # Hide long text on small viewports
+                                            dmc.MediaQuery(
+                                                [
+                                                    dmc.Group(
+                                                        [
+                                                            dmc.ThemeIcon(
+                                                                DashIconify(
+                                                                    icon="cil:airplane-mode",
+                                                                    width=22,
+                                                                    rotate=1
+                                                                ),
+                                                                radius=30,
+                                                                size=36,
+                                                                variant="light",
+                                                                color="blue"
                                                             ),
-                                                            radius=30,
-                                                            size=36,
-                                                            variant="light",
-                                                            color="blue"
-                                                        ),
-                                                        dmc.Text("Flight Planner", size="xl", color="gray"),
-                                                    ]
-                                                )
-                                            ],
-                                            smallerThan="sm",
-                                            styles={"display": "none"},
-                                        ),
-                                        dmc.MediaQuery(
-                                            [
-                                                dmc.Group(
-                                                    [
-                                                        dmc.ThemeIcon(
-                                                            DashIconify(
-                                                                icon="cil:airplane-mode",
-                                                                width=22,
-                                                                rotate=1
+                                                            dmc.Text("Flight Planner", size="xl", color="gray"),
+                                                        ]
+                                                    )
+                                                ],
+                                                smallerThan="sm",
+                                                styles={"display": "none"},
+                                            ),
+
+                                            # Hide short text on large viewports
+                                            dmc.MediaQuery(
+                                                [
+                                                    dmc.Group(
+                                                        [
+                                                            dmc.ThemeIcon(
+                                                                DashIconify(
+                                                                    icon="cil:airplane-mode",
+                                                                    width=22,
+                                                                    rotate=1
+                                                                ),
+                                                                radius=30,
+                                                                size=36,
+                                                                variant="light",
+                                                                color="blue"
                                                             ),
-                                                            radius=30,
-                                                            size=36,
-                                                            variant="light",
-                                                            color="blue"
-                                                        ),
-                                                        dmc.Text("Flight Planner", size="xl", color="gray"),
-                                                    ]
-                                                )
-                                            ],
-                                            largerThan="sm",
-                                            styles={"display": "none"},
-                                        ),
-                                    ],
-                                    href="#",
-                                    style={"textDecoration": "none"},
-                                ),
+                                                            dmc.Text("FliPlan", size="xl", color="gray"),
+                                                        ]
+                                                    )
+                                                ],
+                                                largerThan="sm",
+                                                styles={"display": "none"},
+                                            ),
+                                        ],
+                                        href="/",
+                                        style={"textDecoration": "none"},
+                                    ),
+                                ]
                             ),
                             # Icons
                             dmc.Group(
@@ -82,7 +88,7 @@ def create_header():
                                             label="Source Code",
                                             position="bottom",
                                         ),
-                                        href="#",
+                                        href="https://github.com/yanboe/flightexplorer",
                                     )
                                 ],
                                 position="right",
@@ -92,7 +98,6 @@ def create_header():
                         ],
                         position="apart",
                         align="flex-start",
-                        style={"paddingTop": 5}
                     ),
                 ],
                 fluid=True,
@@ -104,16 +109,103 @@ def create_header():
     )
 
 
-def create_form():
+def create_navbar():
+    return dmc.Navbar(
+        [
+            dmc.Group(
+                [
+                    # Home
+                    dcc.Link(
+                        [
+                            dmc.Group(
+                                [
+                                    dmc.ThemeIcon(
+                                        DashIconify(icon="clarity:home-line", width=18),
+                                        size=30,
+                                        radius=30,
+                                        variant="light"
+                                    ),
+                                    dmc.Text("Home", size="sm", color="gray")
+                                ]
+                            )
+                        ],
+                        href="/",
+                        style={"textDecoration": "none"}
+                    ),
+
+                    # /flights/
+                    dcc.Link(
+                        [
+                            dmc.Group(
+                                [
+                                    dmc.ThemeIcon(
+                                        DashIconify(icon="cil:airplane-mode", width=18, rotate=1),
+                                        size=30,
+                                        radius=30,
+                                        variant="light"
+                                    ),
+                                    dmc.Text("Explore Flights", size="sm", color="gray")
+                                ]
+                            )
+                        ],
+                        href="/flights/",
+                        style={"textDecoration": "none"}
+                    ),
+
+                    # /airports/
+                    dcc.Link(
+                        [
+                            dmc.Group(
+                                [
+                                    dmc.ThemeIcon(
+                                        DashIconify(icon="uil:comparison", width=18),
+                                        size=30,
+                                        radius=30,
+                                        variant="light"
+                                    ),
+                                    dmc.Text("Compare Airports", size="sm", color="gray")
+                                ]
+                            )
+                        ],
+                        href="/airports/",
+                        style={"textDecoration": "none"}
+                    ),
+                    dmc.Divider(style={"marginBottom": 20, "marginTop": 20}),
+
+                    # /about/
+                    dcc.Link(
+                        [
+                            dmc.Text("About", size="sm", color="gray")
+                        ],
+                        href="/about/",
+                        style={"textDecoration": "none"}
+                    ),
+                ],
+                grow=True,
+                position="left",
+                spacing="sm",
+                direction="column",
+                style={"paddingLeft": 30, "paddingRight": 20},
+            ),
+        ],
+        fixed=True,
+        position={"top": 70},
+        width={"base": 300},
+        id="navbar",
+        style={
+            "backgroundColor": "#f8f9fa"
+        }
+    )
+
+
+def create_form(page):
     return dmc.Container(
         [
-
             dmc.Grid(
                 [
                     # Airport From
                     dmc.Col(
                         [
-
                             html.Div(
                                 [
                                     dmc.Select(
@@ -125,7 +217,7 @@ def create_form():
                                         placeholder="Where from?",
                                         size="lg",
                                         maxDropdownHeight=500,
-                                        id="airport_from"
+                                        id=(page + "_airport_from")
                                     )
                                 ]
                             ),
@@ -149,7 +241,7 @@ def create_form():
                                         placeholder="Where to?",
                                         size="lg",
                                         maxDropdownHeight=500,
-                                        id="airport_to"
+                                        id=(page + "_airport_to")
                                     )
                                 ]
                             ),
@@ -159,7 +251,7 @@ def create_form():
                         sm=6,
                         xs=12
                     ),
-                    # DatePicker
+                    # DatePicker for flightplan
                     dmc.Col(
                         [
                             html.Div(
@@ -173,7 +265,34 @@ def create_form():
                                         amountOfMonths=2,
                                         size="lg",
                                         clearable=False,
-                                        id="datepicker"
+                                        id=(page + "_date")
+                                    )
+                                ]
+                            ),
+                        ],
+                        lg=4,
+                        md=4,
+                        sm=12,
+                        xs=12
+                    )
+                    if page == "fp"
+                    else
+                    # DateRangePicker for flightindex
+                    dmc.Col(
+                        [
+                            html.Div(
+                                [
+                                    dmc.DateRangePicker(
+                                        minDate=date(2019, 1, 1),
+                                        maxDate=date(2022, 3, 31),
+                                        value=[date(2019, 6, 11), date(2019, 6, 18)],
+                                        inputFormat="MMM D, YYYY",
+                                        icon=[DashIconify(icon="clarity:date-line", width=25)],
+                                        amountOfMonths=2,
+                                        allowSingleDateInRange=True,
+                                        size="lg",
+                                        clearable=False,
+                                        id=(page + "_date")
                                     )
                                 ]
                             ),
@@ -201,7 +320,7 @@ def create_form():
                                         value="afternoon",
                                         icon=[DashIconify(icon="akar-icons:clock", width=25)],
                                         maxDropdownHeight=500,
-                                        id="dep_time"
+                                        id=(page + "_dep_time")
                                     )
                                 ]
                             ),
@@ -227,7 +346,7 @@ def create_form():
                                         size="md",
                                         value="9",
                                         icon=[DashIconify(icon="ic:round-connecting-airports", width=25)],
-                                        id="max_stops",
+                                        id=(page + "_max_stops"),
                                     )
                                 ]
                             ),
@@ -254,7 +373,7 @@ def create_form():
                                             {"value": 24, "label": "24 hr"},
                                             {"value": 36, "label": "36 hr"},
                                         ],
-                                        id="flight_duration"
+                                        id=(page + "_flight_duration")
                                     )
                                 ]
                             )
@@ -281,7 +400,7 @@ def create_form():
                                             {"value": 12, "label": "12 hr"},
                                             {"value": 18, "label": "18 hr"},
                                         ],
-                                        id="layover_duration"
+                                        id=(page + "_layover_duration")
                                     )
                                 ]
                             )
@@ -296,12 +415,11 @@ def create_form():
             dmc.Divider(
                 variant="solid",
                 style={
-                    "marginTop": "30px",
+                    "marginTop": "40px",
                     "marginBottom": "30px"
                 }
             )
         ],
-        mt="100px"
     )
 
 
@@ -309,7 +427,16 @@ def create_appshell(nav_data):
     return dmc.MantineProvider(
         [
             create_header(),
-            page_container
+            create_navbar(),
+            html.Div(
+                [
+                    dmc.Container(
+                        page_container,
+                        pt=90
+                    ),
+                ],
+                id="wrapper"
+            )
         ],
         theme={
             "fontFamily": "Roboto, sans-serif",

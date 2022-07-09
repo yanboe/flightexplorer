@@ -15,12 +15,6 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', None)
 """
-"""origin = ['EGGW', 'EGKK', 'EGLL', 'EGSS']
-destination = 'LSZH'
-start = '2021-06-11 10:00:00+02'
-end = '2021-06-11 12:00:00+02'
-stop_duration = 5
-max_stops = 1"""
 
 
 def get_sql(origin, destination, start, end, stop_duration):

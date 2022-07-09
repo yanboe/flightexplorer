@@ -1,3 +1,8 @@
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 90px;
+}
+
 html, body {
   font-family: 'Roboto', sans-serif;
 }
@@ -31,4 +36,34 @@ html, body {
     border-bottom: 1px solid rgb(222, 226, 230);
     margin-bottom: 20px;
     margin-top: 20px;
+}
+
+.mantine-Tabs-tabLabel {
+    font-size: 16px;
+}
+
+#wrapper {
+    padding: 10px;
+    margin-left: 300px;
+    margin-right: 320px;
+}
+
+@media only screen and (max-width: 1500px) {
+    #wrapper {
+        margin-right: 0;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    #navbar {
+        display: none;
+    }
+
+    #wrapper {
+        margin-left: 0;
+    }
+}
+
+#navbar {
+    padding-top: 20px;
 }

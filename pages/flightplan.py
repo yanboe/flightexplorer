@@ -30,7 +30,7 @@ sort_select = dmc.Select(
     style={
         "width": 180
     },
-    id="sort_by"
+    id="fp_sort_by"
 )
 
 page_content = dmc.Container(
@@ -77,7 +77,7 @@ page_content = dmc.Container(
 
                                     # Title
                                     dmc.Text(
-                                        "Select an origin and a destination above to see some flights!",
+                                        "Select an origin and a destination to see some flights",
                                         align="center",
                                         size="lg",
                                         style={
@@ -107,39 +107,39 @@ page_content = dmc.Container(
                         p="lg",
                     )
                 ],
-                id="page-content"
+                id="fp_content"
             ),
             # hidden "sort by" dropdown
-            html.Div(children=sort_select, style={"display": "none"})
+            html.Div(sort_select, style={"display": "none"})
         ],
         loaderProps={"variant": "oval", "color": "blue", "size": "xl"},
     ),
 )
 
-layout = [create_form(), page_content]
+layout = [create_form("fp"), page_content]
 
 dash.register_page(
     __name__,
-    path="/flightplan/",
-    name="Flight Plan",
-    title="Flight Plan",
+    path="/flights/",
+    name="Explore Flights",
+    title="Explore Flights",
     layout=layout
 )
 
 
 @callback(
-    Output("page-content", "children"),
-    Output("sort_by", "value"),
-    Output("dep_time", "value"),
-    Output("max_stops", "value"),
-    Input("airport_from", "value"),
-    Input("airport_to", "value"),
-    Input("datepicker", "value"),
-    Input("dep_time", "value"),
-    Input("max_stops", "value"),
-    Input("flight_duration", "value"),
-    Input("layover_duration", "value"),
-    Input("sort_by", "value"),
+    Output("fp_content", "children"),
+    Output("fp_sort_by", "value"),
+    Output("fp_dep_time", "value"),
+    Output("fp_max_stops", "value"),
+    Input("fp_airport_from", "value"),
+    Input("fp_airport_to", "value"),
+    Input("fp_date", "value"),
+    Input("fp_dep_time", "value"),
+    Input("fp_max_stops", "value"),
+    Input("fp_flight_duration", "value"),
+    Input("fp_layover_duration", "value"),
+    Input("fp_sort_by", "value"),
     prevent_initial_call=True
 )
 def get_flightplan(airport_from, airport_to, flight_date, dep_time,
@@ -207,52 +207,39 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
         else:
             df_flights = df_flights.sort_values(["total_duration_s"], ascending=[True])
 
+    # page content
+    content = []
+
+    # content header
+    content_header = dmc.Group(
+        [
+            # Title/Subtitle
+            html.Div(
+                [
+                    dmc.Text("Results", style={"fontSize": 30, "fontWeight": 400}),
+                    dmc.Text("Only the first 10 flights are shown.", color="dimmed", )
+                ]
+            ),
+            # "Sort by" dropdown
+            sort_select
+        ],
+        position="apart",
+        align="flex-start",
+        style={"marginBottom": 15}
+    )
+    content.append(content_header)
+
+    # Create subcontent
+    if df_flights.empty:
+        # no flights found
+        subcontent = dmc.Text("No flights found")
+    else:
         # get airport details (full name and coordinates)
         df_airports = get_airport_details(df_flights)
 
         # get airline details (full name)
         df_airlines = get_airline_details(df_flights)
 
-    # page content
-    content = []
-
-    # create title/subtitle div
-    title = dmc.Text(
-        "Results",
-        style={
-            "fontSize": 30,
-            "fontWeight": 400
-        }
-    )
-    subtitle = dmc.Text(
-        "Only the first 10 flights are shown.",
-        color="dimmed",
-    )
-    title_subtitle = html.Div(
-        [
-            title,
-            subtitle
-        ]
-    )
-
-    # content header
-    content_header = dmc.Group(
-        [
-            title_subtitle,
-            sort_select
-        ],
-        position="apart",
-        align="flex-start",
-        style={
-            "marginBottom": 15
-        }
-    )
-    content.append(content_header)
-
-    if df_flights.empty:
-        # no flights found
-        subcontent = dmc.Text("No flights found")
-    else:
         # create accordion for flights
         accordion_items = []
 
@@ -844,6 +831,7 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
                     px=0,
                     mt=20,
                 )
+
             else:
                 continue
 
@@ -854,27 +842,27 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
         # add accordion
         subcontent = dmc.Accordion(children=accordion_items, multiple=True, iconPosition="right")
 
-    # create map
-    fig_map = map_figure(df_flights, df_airports)
+        # create and add map
+        fig_map = map_figure(df_flights, df_airports)
+        content.append(fig_map)
 
     # add subcontent
-    content.append(fig_map)
     content.append(subcontent)
 
     return content, sort_by, dep_time, max_stops
 
 
 @callback(
-    Output("airport_to", "data"),
-    Input("airport_to", "value")
+    Output("fp_airport_to", "data"),
+    Input("fp_airport_to", "value")
 )
 def get_airport_to(value):
     return get_airports_to()
 
 
 @callback(
-    Output("airport_from", "data"),
-    Input("airport_from", "value")
+    Output("fp_airport_from", "data"),
+    Input("fp_airport_from", "value")
 )
 def get_airport_from(value):
     return get_airports_from()

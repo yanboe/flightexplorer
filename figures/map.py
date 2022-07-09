@@ -1,6 +1,5 @@
 import plotly.graph_objects as go
 import dash_mantine_components as dmc
-import plotly.express as px
 
 from dash import dcc
 from os import environ
@@ -109,6 +108,6 @@ def map_figure(df_flights, df_airports):
         mb=15,
         style={
             "border": "1px solid rgb(222, 226, 230)",
-            "border-radius": "4px"
+            "borderRadius": "4px"
         }
     )
