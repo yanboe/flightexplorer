@@ -15,12 +15,6 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', None)
 """
-"""origin = ['EGGW', 'EGKK', 'EGLL', 'EGSS']
-destination = 'LSZH'
-start = '2021-06-11 10:00:00+02'
-end = '2021-06-11 12:00:00+02'
-stop_duration = 5
-max_stops = 1"""
 
 
 def get_sql(origin, destination, start, end, stop_duration):
@@ -54,7 +48,7 @@ def get_sql(origin, destination, start, end, stop_duration):
           a.firstseen.between(start, end),
           b.firstseen.between(
             start,
-            start + func.cast(concat(1, ' DAYS'), Interval)
+            end + func.cast(concat(1, ' DAYS'), Interval)
           ),
           b.firstseen.between(
             a.lastseen + func.cast(concat(1, ' HOURS'), Interval),
@@ -80,11 +74,11 @@ def get_sql(origin, destination, start, end, stop_duration):
           a.firstseen.between(start, end),
           b.firstseen.between(
             start,
-            start + func.cast(concat(1, ' DAYS'), Interval)
+            end + func.cast(concat(1, ' DAYS'), Interval)
           ),
           c.firstseen.between(
             start,
-            start + func.cast(concat(2, ' DAYS'), Interval)
+            end + func.cast(concat(2, ' DAYS'), Interval)
           ),
           b.firstseen.between(
             a.lastseen + func.cast(concat(1, ' HOURS'), Interval),
@@ -143,17 +137,6 @@ def get_airline_code(df, column, none_value):
         return col_exists.str[:3]
 
 
-def get_airline_name(callsign):
-    """
-    Get the airline name from the callsign
-    """
-    if callsign.isnull().values.any():
-        return np.nan
-    else:
-        airline_name = callsign + " Airline"
-        return airline_name
-
-
 def check_if_exists(df, column, none_value):
     """
     Check if column exists in df; if yes, return the column as a series, if not, return NaN/NaT
@@ -181,7 +164,7 @@ def convert_time(column):
         return column
 
 
-def get_flights(origin, destination, start, end, stop_duration, max_stops):
+def get_flights(origin, destination, start, end, stop_duration, max_stops, flight_filter="unique"):
     # Get the flights and combine them into df_all
     stmt0stop, stmt1stop, stmt2stop = get_sql(origin, destination, start, end, stop_duration)
     session = Session()
@@ -202,23 +185,21 @@ def get_flights(origin, destination, start, end, stop_duration, max_stops):
     df_all = df_all.reset_index(drop=True)
 
     df_formatted_columns = [
-        "f1_airline_code", "f1_airline_name", "f1_airport_from", "f1_airport_to",
-        "f1_airport_from_long", "f1_airport_to_long",
+        "f1_airline_code", "f1_airport_from", "f1_airport_to",
         "f1_time_from", "f1_time_from_str", "f1_time_to", "f1_time_to_str",
         "f1_duration", "f1_duration_s",
 
-        "f2_airline_code", "f2_airline_name", "f2_airport_from", "f2_airport_to",
-        "f2_airport_from_long", "f2_airport_to_long",
+        "f2_airline_code", "f2_airport_from", "f2_airport_to",
         "f2_time_from", "f2_time_from_str", "f2_time_to", "f2_time_to_str",
         "f2_duration", "f2_duration_s",
 
-        "f3_airline_code", "f3_airline_name", "f3_airport_from", "f3_airport_to",
-        "f3_airport_from_long", "f3_airport_to_long",
+        "f3_airline_code", "f3_airport_from", "f3_airport_to",
         "f3_time_from", "f3_time_from_str", "f3_time_to", "f3_time_to_str",
         "f3_duration", "f3_duration_s",
 
         "total_duration", "total_duration_s", "stop_count", "stop_count_str", "arr_time",
-        "layover_duration_1", "layover_duration_1_s", "layover_duration_2", "layover_duration_2_s"
+        "layover_duration_1", "layover_duration_1_s", "layover_duration_2", "layover_duration_2_s",
+        "layover_duration_sum"
     ]
 
     df_formatted = pd.DataFrame(columns=df_formatted_columns)
@@ -229,11 +210,8 @@ def get_flights(origin, destination, start, end, stop_duration, max_stops):
         return df_final
     else:
         df_formatted["f1_airline_code"] = df_all["callsign"].str[:3]
-        df_formatted["f1_airline_name"] = get_airline_name(df_all["callsign"].str[:3])
         df_formatted["f1_airport_from"] = df_all["origin"]
         df_formatted["f1_airport_to"] = df_all["destination"]
-        df_formatted["f1_airport_from_long"] = df_all["origin"]
-        df_formatted["f1_airport_to_long"] = df_all["destination"]
         df_formatted["f1_time_from"] = df_all["firstseen"]
         df_formatted["f1_time_from_str"] = convert_time(df_formatted["f1_time_from"])
         df_formatted["f1_time_to"] = df_all["lastseen"]
@@ -243,11 +221,8 @@ def get_flights(origin, destination, start, end, stop_duration, max_stops):
 
     # 2nd flight
     df_formatted["f2_airline_code"] = get_airline_code(df_all, "callsign_1", "NaN")
-    df_formatted["f2_airline_name"] = get_airline_name(df_formatted["f2_airline_code"])
     df_formatted["f2_airport_from"] = check_if_exists(df_all, "origin_1", "NaN")
     df_formatted["f2_airport_to"] = check_if_exists(df_all, "destination_1", "NaN")
-    df_formatted["f2_airport_from_long"] = check_if_exists(df_all, "origin_1", "NaN")
-    df_formatted["f2_airport_to_long"] = check_if_exists(df_all, "destination_1", "NaN")
     df_formatted["f2_time_from"] = check_if_exists(df_all, "firstseen_1", "NaT")
     df_formatted["f2_time_from_str"] = convert_time(df_formatted["f2_time_from"])
     df_formatted["f2_time_to"] = check_if_exists(df_all, "lastseen_1", "NaT")
@@ -265,11 +240,8 @@ def get_flights(origin, destination, start, end, stop_duration, max_stops):
 
     # 3rd flight
     df_formatted["f3_airline_code"] = get_airline_code(df_all, "callsign_2", "NaN")
-    df_formatted["f3_airline_name"] = get_airline_name(df_formatted["f3_airline_code"])
     df_formatted["f3_airport_from"] = check_if_exists(df_all, "origin_2", "NaN")
     df_formatted["f3_airport_to"] = check_if_exists(df_all, "destination_2", "NaN")
-    df_formatted["f3_airport_from_long"] = check_if_exists(df_all, "origin_2", "NaN")
-    df_formatted["f3_airport_to_long"] = check_if_exists(df_all, "destination_2", "NaN")
     df_formatted["f3_time_from"] = check_if_exists(df_all, "firstseen_2", "NaT")
     df_formatted["f3_time_from_str"] = convert_time(df_formatted["f3_time_from"])
     df_formatted["f3_time_to"] = check_if_exists(df_all, "lastseen_2", "NaT")
@@ -369,14 +341,17 @@ def get_flights(origin, destination, start, end, stop_duration, max_stops):
     arr_time = np.select(cond, out)
     df_formatted["arr_time"] = arr_time
 
-    df_sorted = df_formatted.sort_values(
-        ["f1_airport_from", "f2_airport_from", "f3_airport_from", "f3_airport_to", "total_duration_s"],
-        ascending=[True, True, True, True, True]
-    )
-
-    df_final = df_sorted.drop_duplicates(
-        subset=["f1_airport_from", "f2_airport_from", "f3_airport_from", "f3_airport_to"],
-        keep="first"
-    )
+    if flight_filter == "unique":
+        # Sort duration ascending to drop longer flights flying the same route
+        df_sorted = df_formatted.sort_values(
+            ["f1_airport_from", "f2_airport_from", "f3_airport_from", "f3_airport_to", "total_duration_s"],
+            ascending=[True, True, True, True, True]
+        )
+        df_final = df_sorted.drop_duplicates(
+            subset=["f1_airport_from", "f2_airport_from", "f3_airport_from", "f3_airport_to"],
+            keep="first"
+        )
+    else:
+        df_final = df_formatted
 
     return df_final

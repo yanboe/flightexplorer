@@ -1,7 +1,7 @@
 import dash
 from dash import Dash
 
-from lib.appshell import create_appshell
+from layout.appshell import create_appshell
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,7 +15,7 @@ app = Dash(
     ]
 )
 
-# app.config.suppress_callback_exceptions = True
+app.config.suppress_callback_exceptions = True
 app.layout = create_appshell(dash.page_registry.values())
 
 server = app.server

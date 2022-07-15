@@ -11,7 +11,9 @@ layout = html.Div(
                 dmc.Text("Sorry, we can't find this page.", color="dimmed"),
                 dmc.Space(h=30),
                 dmc.Anchor("Return back to home", href="/", underline=False)
-            ]
+            ],
+            pl=0,
+            pr=0
         )
     ]
 )

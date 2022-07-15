@@ -4,7 +4,7 @@ html {
 }
 
 html, body {
-  font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .mantine-Accordion-item {
@@ -66,4 +66,8 @@ html, body {
 
 #navbar {
     padding-top: 20px;
+}
+
+.mantine-Alert-label {
+    font-weight: 500;
 }

@@ -5,7 +5,7 @@ from dash import html, dcc
 from dash_iconify import DashIconify
 
 
-layout = html.Div(
+layout = dmc.Container(
     [
         # Title + Subtitle
         dmc.Container(
@@ -20,8 +20,9 @@ layout = html.Div(
                     align="center"
                 ),
             ],
-            size="lg",
-            style={"marginTop": 30, "marginBottom": 20}
+            pl=8,
+            pr=8,
+            style={"marginTop": 30, "marginBottom": 20},
         ),
 
         # Paper for "explore flights" and "compare airports"
@@ -39,7 +40,11 @@ layout = html.Div(
                                                 dmc.Group(
                                                     [
                                                         dmc.ThemeIcon(
-                                                            DashIconify(icon="cil:airplane-mode", height=20, rotate=1),
+                                                            DashIconify(
+                                                                icon="ic:round-airplanemode-active",
+                                                                height=20,
+                                                                rotate=1
+                                                            ),
                                                             size=40,
                                                             radius=40,
                                                             variant="light"
@@ -101,7 +106,7 @@ layout = html.Div(
                                                 dmc.Group(
                                                     [
                                                         dmc.ThemeIcon(
-                                                            DashIconify(icon="uil:comparison", height=20),
+                                                            DashIconify(icon="ic:round-ssid-chart", height=20),
                                                             size=40,
                                                             radius=40,
                                                             variant="light"
@@ -154,7 +159,8 @@ layout = html.Div(
                     grow=True
                 )
             ],
-            size="lg"
+            pl=8,
+            pr=8
         ),
 
         # Paper for additional information
@@ -221,9 +227,12 @@ layout = html.Div(
                     grow=True
                 )
             ],
-            size="lg"
-        )
-    ]
+            pl=8,
+            pr=8
+        ),
+    ],
+    pl=0,
+    pr=0
 )
 
 dash.register_page(

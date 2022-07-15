@@ -7,14 +7,15 @@ from os import environ
 from utils.map_utils import get_map_lines, get_map_markers
 
 MAPBOX_KEY = environ.get("MAPBOX_KEY")
+MAPBOX_STYLE = environ.get("MAPBOX_STYLE")
 
-map_config = {
+config = {
     "displaylogo": False,
     "displayModeBar": True
 }
 
 
-def map_figure(df_flights, df_airports):
+def create_map(df_flights, df_airports):
     # Get map lines and map markers
     df_map_lines = get_map_lines(df_flights, df_airports)
     df_map_markers = get_map_markers(df_map_lines, df_airports)
@@ -75,7 +76,7 @@ def map_figure(df_flights, df_airports):
         margin={"r": 0, "t": 0, "l": 0, "b": 0},
         mapbox={
             "accesstoken": MAPBOX_KEY,
-            "style": "mapbox://styles/ybybyb/cl573u62m006r14qpu8kdm7j2",
+            "style": MAPBOX_STYLE,
             "zoom": 3,
             "center": {
                 "lat": df_map_lines.lat.iloc[0],
@@ -98,7 +99,7 @@ def map_figure(df_flights, df_airports):
         [
             dcc.Graph(
                 figure=fig,
-                config=map_config
+                config=config
             )
         ],
         pt=0,

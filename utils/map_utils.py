@@ -4,7 +4,7 @@ from itertools import islice
 
 def get_map_lines(df_flights, df_airports):
 
-    df_map_lines = pd.DataFrame()
+    lod_map_lines = []
     colors = [
         "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99",
         "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a"
@@ -23,13 +23,13 @@ def get_map_lines(df_flights, df_airports):
             lon = df_airports.loc[row.f1_airport_from, "airport_longitude_deg"]
             lat = df_airports.loc[row.f1_airport_from, "airport_latitude_deg"]
             iata = df_airports.loc[row.f1_airport_from, "airport_iata_code"]
-            df_map_lines = append_to_df(df_map_lines, flight, lon, lat, iata, color)
+            lod_map_lines = append_to_lod(lod_map_lines, flight, lon, lat, iata, color)
 
             # To 1
             lon = df_airports.loc[row.f1_airport_to, "airport_longitude_deg"]
             lat = df_airports.loc[row.f1_airport_to, "airport_latitude_deg"]
             iata = df_airports.loc[row.f1_airport_to, "airport_iata_code"]
-            df_map_lines = append_to_df(df_map_lines, flight, lon, lat, iata, color)
+            lod_map_lines = append_to_lod(lod_map_lines, flight, lon, lat, iata, color)
         elif row.stop_count == 1:
             flight = "{}–{}–{}".format(
                 df_airports.loc[row.f1_airport_from, "airport_iata_code"],
@@ -40,19 +40,19 @@ def get_map_lines(df_flights, df_airports):
             lon = df_airports.loc[row.f1_airport_from, "airport_longitude_deg"]
             lat = df_airports.loc[row.f1_airport_from, "airport_latitude_deg"]
             iata = df_airports.loc[row.f1_airport_from, "airport_iata_code"]
-            df_map_lines = append_to_df(df_map_lines, flight, lon, lat, iata, color)
+            lod_map_lines = append_to_lod(lod_map_lines, flight, lon, lat, iata, color)
 
             # To 1
             lon = df_airports.loc[row.f1_airport_to, "airport_longitude_deg"]
             lat = df_airports.loc[row.f1_airport_to, "airport_latitude_deg"]
             iata = df_airports.loc[row.f1_airport_to, "airport_iata_code"]
-            df_map_lines = append_to_df(df_map_lines, flight, lon, lat, iata, color)
+            lod_map_lines = append_to_lod(lod_map_lines, flight, lon, lat, iata, color)
 
             # To 2
             lon = df_airports.loc[row.f2_airport_to, "airport_longitude_deg"]
             lat = df_airports.loc[row.f2_airport_to, "airport_latitude_deg"]
             iata = df_airports.loc[row.f2_airport_to, "airport_iata_code"]
-            df_map_lines = append_to_df(df_map_lines, flight, lon, lat, iata, color)
+            lod_map_lines = append_to_lod(lod_map_lines, flight, lon, lat, iata, color)
         elif row.stop_count == 2:
             flight = "{}–{}–{}–{}".format(
                 df_airports.loc[row.f1_airport_from, "airport_iata_code"],
@@ -64,29 +64,29 @@ def get_map_lines(df_flights, df_airports):
             lon = df_airports.loc[row.f1_airport_from, "airport_longitude_deg"]
             lat = df_airports.loc[row.f1_airport_from, "airport_latitude_deg"]
             iata = df_airports.loc[row.f1_airport_from, "airport_iata_code"]
-            df_map_lines = append_to_df(df_map_lines, flight, lon, lat, iata, color)
+            lod_map_lines = append_to_lod(lod_map_lines, flight, lon, lat, iata, color)
 
             # To 1
             lon = df_airports.loc[row.f1_airport_to, "airport_longitude_deg"]
             lat = df_airports.loc[row.f1_airport_to, "airport_latitude_deg"]
             iata = df_airports.loc[row.f1_airport_to, "airport_iata_code"]
-            df_map_lines = append_to_df(df_map_lines, flight, lon, lat, iata, color)
+            lod_map_lines = append_to_lod(lod_map_lines, flight, lon, lat, iata, color)
 
             # To 2
             lon = df_airports.loc[row.f2_airport_to, "airport_longitude_deg"]
             lat = df_airports.loc[row.f2_airport_to, "airport_latitude_deg"]
             iata = df_airports.loc[row.f2_airport_to, "airport_iata_code"]
-            df_map_lines = append_to_df(df_map_lines, flight, lon, lat, iata, color)
+            lod_map_lines = append_to_lod(lod_map_lines, flight, lon, lat, iata, color)
 
             # To 3
             lon = df_airports.loc[row.f3_airport_to, "airport_longitude_deg"]
             lat = df_airports.loc[row.f3_airport_to, "airport_latitude_deg"]
             iata = df_airports.loc[row.f3_airport_to, "airport_iata_code"]
-            df_map_lines = append_to_df(df_map_lines, flight, lon, lat, iata, color)
+            lod_map_lines = append_to_lod(lod_map_lines, flight, lon, lat, iata, color)
         else:
             continue
 
-    return df_map_lines
+    return pd.DataFrame(lod_map_lines)
 
 
 def get_map_markers(df_map_lines, df_airports):
@@ -104,12 +104,13 @@ def get_map_markers(df_map_lines, df_airports):
     return df_map_markers
 
 
-def append_to_df(df, flight, lon, lat, iata, color):
-    df_dict = {
+def append_to_lod(list_, flight, lon, lat, iata, color):
+    dict_ = {
         "flight": flight,
         "lon": lon,
         "lat": lat,
         "iata": iata,
         "color": color
     }
-    return pd.concat([df, pd.DataFrame.from_records([df_dict])], ignore_index=True)
+    list_.append(dict_)
+    return list_

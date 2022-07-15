@@ -1,8 +1,6 @@
-import random
-
-from dash import dcc
 import dash_mantine_components as dmc
 import plotly.graph_objects as go
+import random
 
 
 def create_figure():
@@ -36,14 +34,42 @@ def create_figure():
     )
 
 
-def create_graph_dummy(graph_id):
-    return dmc.Paper(
+def create_kpi(title, row, df, airport, kpi):
+    # KPI value of selected period
+    value = row[kpi]
+
+    # KPI value of previous period
+    df = df.set_index("airport")
+    value_prev = df.loc[airport][kpi]
+
+    # Calculate difference and format it with +/- sign (e.g. 3.13 -> +3.13)
+    diff = create_display_diff(value, value_prev)
+
+    return dmc.Col(
         [
-            dmc.Text(id=("fi_graph_title_" + str(graph_id)), weight=300, style={"fontSize": 26}),
-            dcc.Graph(figure=create_figure(), id=("fi_graph_" + str(graph_id)), responsive=True),
+            dmc.Text(title, color="dimmed", size="xs", style={"lineHeight": 1.3}),
+            dmc.Text(f"{value:.2f}", weight=500, style={"fontSize": 24, "lineHeight": 1.3}),
+            dmc.Text(
+                ("Previous period: ", f"{value_prev:.2f}", diff),
+                size="xs",
+                color="dimmed",
+                style={"lineHeight": 1.3}
+            )
         ],
-        p="lg",
-        radius="sm",
-        withBorder=True,
-        mb=15
+        lg=3,
+        md=3,
+        sm=4,
+        xs=6,
+        style={
+            "marginBottom": 10
+        }
     )
+
+
+def create_display_diff(now, prev):
+    # Calculate difference and format it with +/- sign (e.g. 3.13 -> +3.13)
+    diff = now - prev
+    if diff == 0:
+        return f" ({diff:+})"
+    else:
+        return f" ({diff:+.2f})"

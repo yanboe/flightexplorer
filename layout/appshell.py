@@ -121,7 +121,7 @@ def create_navbar():
                             dmc.Group(
                                 [
                                     dmc.ThemeIcon(
-                                        DashIconify(icon="clarity:home-line", width=18),
+                                        DashIconify(icon="ic:outline-home", width=18),
                                         size=30,
                                         radius=30,
                                         variant="light"
@@ -140,7 +140,7 @@ def create_navbar():
                             dmc.Group(
                                 [
                                     dmc.ThemeIcon(
-                                        DashIconify(icon="cil:airplane-mode", width=18, rotate=1),
+                                        DashIconify(icon="ic:round-airplanemode-active", width=18, rotate=1),
                                         size=30,
                                         radius=30,
                                         variant="light"
@@ -159,7 +159,7 @@ def create_navbar():
                             dmc.Group(
                                 [
                                     dmc.ThemeIcon(
-                                        DashIconify(icon="uil:comparison", width=18),
+                                        DashIconify(icon="ic:round-ssid-chart", width=18),
                                         size=30,
                                         radius=30,
                                         variant="light"
@@ -222,7 +222,7 @@ def create_form(page):
                                         searchable=True,
                                         clearable=True,
                                         nothingFound="No airport found!",
-                                        icon=[DashIconify(icon="clarity:map-marker-line", width=25)],
+                                        icon=[DashIconify(icon="ic:outline-place", width=25)],
                                         limit=10,
                                         placeholder="Where from?",
                                         size="lg",
@@ -246,7 +246,7 @@ def create_form(page):
                                         searchable=True,
                                         clearable=True,
                                         nothingFound="No airport found!",
-                                        icon=[DashIconify(icon="clarity:map-marker-line", width=25)],
+                                        icon=[DashIconify(icon="ic:outline-place", width=25)],
                                         limit=10,
                                         placeholder="Where to?",
                                         size="lg",
@@ -261,7 +261,7 @@ def create_form(page):
                         sm=6,
                         xs=12
                     ),
-                    # DatePicker for flightplan
+                    # DatePicker for flights
                     dmc.Col(
                         [
                             html.Div(
@@ -271,8 +271,7 @@ def create_form(page):
                                         maxDate=date(2022, 3, 31),
                                         value=date(2019, 6, 11),
                                         inputFormat="MMM D, YYYY",
-                                        icon=[DashIconify(icon="clarity:date-line", width=25)],
-                                        amountOfMonths=2,
+                                        icon=[DashIconify(icon="ic:outline-calendar-month", width=25)],
                                         size="lg",
                                         clearable=False,
                                         id=(page + "_date")
@@ -285,9 +284,9 @@ def create_form(page):
                         sm=12,
                         xs=12
                     )
-                    if page == "fp"
+                    if page == "fl"
                     else
-                    # DateRangePicker for flightindex
+                    # DateRangePicker for airports
                     dmc.Col(
                         [
                             html.Div(
@@ -297,8 +296,7 @@ def create_form(page):
                                         maxDate=date(2022, 3, 31),
                                         value=[date(2019, 6, 11), date(2019, 6, 18)],
                                         inputFormat="MMM D, YYYY",
-                                        icon=[DashIconify(icon="clarity:date-line", width=25)],
-                                        amountOfMonths=2,
+                                        icon=[DashIconify(icon="ic:outline-calendar-month", width=25)],
                                         allowSingleDateInRange=True,
                                         size="lg",
                                         clearable=False,
@@ -312,7 +310,7 @@ def create_form(page):
                         sm=12,
                         xs=12
                     ),
-                    # Departure Time
+                    # Departure Time for flights
                     dmc.Col(
                         [
                             html.Div(
@@ -328,7 +326,7 @@ def create_form(page):
                                         label="Departure Time",
                                         size="md",
                                         value="afternoon",
-                                        icon=[DashIconify(icon="akar-icons:clock", width=25)],
+                                        icon=[DashIconify(icon="ic:outline-watch-later", width=25)],
                                         maxDropdownHeight=500,
                                         id=(page + "_dep_time")
                                     )
@@ -339,8 +337,36 @@ def create_form(page):
                         md=6,
                         sm=6,
                         xs=12
+                    )
+                    if page == "fl"
+                    else
+                    # Comparison period
+                    dmc.Col(
+                        [
+                            html.Div(
+                                [
+                                    dmc.Select(
+                                        data=[
+                                            {"value": "7", "label": "Last week"},
+                                            {"value": "30", "label": "Last month"},
+                                            {"value": "365", "label": "Last year"}
+                                        ],
+                                        label="Comparison period",
+                                        size="md",
+                                        value="7",
+                                        icon=[DashIconify(icon="ic:outline-calendar-month", width=25)],
+                                        maxDropdownHeight=500,
+                                        id=(page + "_period")
+                                    )
+                                ]
+                            )
+                        ],
+                        lg=6,
+                        md=6,
+                        sm=6,
+                        xs=12
                     ),
-                    # Max Stops
+                    # Max Stops for flights
                     dmc.Col(
                         [
                             html.Div(
@@ -355,7 +381,7 @@ def create_form(page):
                                         label="Stops",
                                         size="md",
                                         value="9",
-                                        icon=[DashIconify(icon="ic:round-connecting-airports", width=25)],
+                                        icon=[DashIconify(icon="ic:round-airline-stops", width=25)],
                                         id=(page + "_max_stops"),
                                     )
                                 ]
@@ -364,7 +390,33 @@ def create_form(page):
                         lg=6,
                         md=6,
                         sm=6,
-                        xs=12
+                        xs=12,
+                    )
+                    if page == "fl"
+                    else
+                    # Max Stops for airports
+                    dmc.Col(
+                        [
+                            html.Div(
+                                [
+                                    dmc.Select(
+                                        data=[
+                                            {"label": "Nonstop only", "value": "0"},
+                                            {"label": "1 stop or less", "value": "1"},
+                                        ],
+                                        label="Stops",
+                                        size="md",
+                                        value="1",
+                                        icon=[DashIconify(icon="ic:round-airline-stops", width=25)],
+                                        id=(page + "_max_stops"),
+                                    )
+                                ]
+                            ),
+                        ],
+                        lg=6,
+                        md=6,
+                        sm=6,
+                        xs=12,
                     ),
                     # Flight Duration
                     dmc.Col(
@@ -391,7 +443,7 @@ def create_form(page):
                         lg=6,
                         md=6,
                         sm=6,
-                        xs=12
+                        xs=12,
                     ),
                     # Layover Duration
                     dmc.Col(
@@ -418,7 +470,7 @@ def create_form(page):
                         lg=6,
                         md=6,
                         sm=6,
-                        xs=12
+                        xs=12,
                     )
                 ],
             ),
@@ -430,6 +482,8 @@ def create_form(page):
                 }
             )
         ],
+        pl=0,
+        pr=0
     )
 
 
@@ -442,7 +496,9 @@ def create_appshell(nav_data):
                 [
                     dmc.Container(
                         page_container,
-                        pt=90
+                        pt=90,
+                        pl=5,
+                        pr=5
                     ),
                 ],
                 id="wrapper"

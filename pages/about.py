@@ -3,7 +3,7 @@ import dash_mantine_components as dmc
 
 from dash import html, dcc
 
-layout = html.Div(
+layout = dmc.Container(
     [
         dmc.Center(
             [
@@ -44,7 +44,9 @@ layout = html.Div(
                 )
             ],
         )
-    ]
+    ],
+    pl=0,
+    pr=0
 )
 
 dash.register_page(

@@ -27,3 +27,4 @@ SQLAlchemy==1.4.39
 tenacity==8.0.1
 Werkzeug==2.1.2
 zipp==3.8.0
+scipy~=1.8.1

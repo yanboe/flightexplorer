@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import aliased
 
 
-def get_airports_from():
+def get_airports_from(page):
     session = Session()
 
     a = aliased(Airport)
@@ -70,15 +70,17 @@ def get_airports_from():
     df_mun["group"] = "Municipality"
     df_mun = df_mun.dropna()
 
-    df_air = pd.DataFrame(columns=["label", "value", "group"])
-    df_air["label"] = (airports["airport_name"] + " (" + airports["airport_iata_code"] + ")").drop_duplicates()
-    df_air["value"] = ("air#" + airports["airport_iata_code"])
-    df_air["group"] = "Airport"
-    df_air = df_air.dropna()
+    if page == "fl":
+        df_air = pd.DataFrame(columns=["label", "value", "group"])
+        df_air["label"] = (airports["airport_name"] + " (" + airports["airport_iata_code"] + ")").drop_duplicates()
+        df_air["value"] = ("air#" + airports["airport_iata_code"])
+        df_air["group"] = "Airport"
+        df_air = df_air.dropna()
+        df_from = pd.concat([df_con, df_cou, df_reg, df_mun, df_air])
+    else:
+        df_from = pd.concat([df_con, df_cou, df_reg, df_mun])
 
-    df_from = pd.concat([df_con, df_cou, df_reg, df_mun, df_air])
     df_from = df_from.sort_values(["group", "label"], ascending=[True, True]).reset_index(drop=True)
-
     return df_from.to_dict("records")
 
 
@@ -88,7 +90,10 @@ def get_airports_to():
     a = aliased(Airport)
     airport_stmt = \
         select(a.airport_iata_code, a.airport_name).\
-        where(a.airport_type == "large_airport", a.airport_scheduled_service == "yes")
+        where(
+            a.airport_type.in_(["large_airport", "medium_airport"]),
+            a.airport_scheduled_service == "yes"
+        )
     airports = pd.read_sql(airport_stmt, session.bind)
 
     df_air = pd.DataFrame(columns=["label", "value"])
@@ -96,7 +101,6 @@ def get_airports_to():
     df_air["value"] = ("air#" + airports["airport_iata_code"])
     df_air = df_air.dropna()
     df_air = df_air.sort_values(["label"], ascending=[True]).reset_index(drop=True)
-
     return df_air.to_dict("records")
 
 
@@ -167,17 +171,32 @@ def get_airports_by_key(selected_value):
     return airport_list
 
 
-def get_airport_details(df):
+def get_airport_details_fl(df):
     f1_airport_from = pd.Series(df["f1_airport_from"].dropna().unique())
-    f2_airport_from = pd.Series(df["f2_airport_from"].dropna().unique())
-    f3_airport_from = pd.Series(df["f3_airport_from"].dropna().unique())
+    f1_airport_to = pd.Series(df["f1_airport_to"].dropna().unique())
+    f2_airport_to = pd.Series(df["f2_airport_to"].dropna().unique())
     f3_airport_to = pd.Series(df["f3_airport_to"].dropna().unique())
-    airports = pd.concat([f1_airport_from, f2_airport_from, f3_airport_from, f3_airport_to]).tolist()
+    airports = pd.concat([f1_airport_from, f1_airport_to, f2_airport_to, f3_airport_to]).tolist()
 
     session = Session()
     a = aliased(Airport)
     stmt = \
         select(a.airport_ident, a.airport_iata_code, a.airport_name, a.airport_latitude_deg, a.airport_longitude_deg).\
+        where(
+            a.airport_ident.in_(airports)
+        )
+    airport_df = pd.read_sql(stmt, session.bind).set_index("airport_ident")
+
+    return airport_df
+
+
+def get_airport_details_ap(df):
+    airports = pd.Series(df["airport"]).tolist()
+
+    session = Session()
+    a = aliased(Airport)
+    stmt = \
+        select(a.airport_ident, a.airport_iata_code, a.airport_name). \
         where(
             a.airport_ident.in_(airports)
         )
