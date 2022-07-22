@@ -1,14 +1,10 @@
 import pandas as pd
+from sklearn.preprocessing import QuantileTransformer
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
 
-def get_unweighted_kpi(df_odp):
-    # TODO: KPIs for General Airport Performance
-    kpi1 = df_odp.groupby(["f1_airport_from"])["f1_airport_from"].count(). \
-        reset_index(name="kpi1").set_index("f1_airport_from")
-    kpi2 = df_odp.groupby(["f1_airport_from"])["f1_airport_from"].count(). \
-        reset_index(name="kpi2").set_index("f1_airport_from")
-    kpi3 = df_odp.groupby(["f1_airport_from"])["f1_airport_from"].count(). \
-        reset_index(name="kpi3").set_index("f1_airport_from")
+def get_unweighted_kpi(df_odp, df_gap):
 
     # KPIs for Origin-to-Destination Performance
     kpi4 = df_odp.groupby(["f1_airport_from"])["f1_airport_from"].count().\
@@ -22,56 +18,62 @@ def get_unweighted_kpi(df_odp):
     kpi8 = df_odp.groupby(["f1_airport_from"])["layover_duration_1_s"].mean().\
         reset_index(name="kpi8").set_index("f1_airport_from")
 
-    df_kpi = pd.concat([kpi1, kpi2, kpi3, kpi4, kpi5, kpi6, kpi7, kpi8], axis=1).reset_index()
+    # Concat GAP and ODP KPIs
+    df_kpi = pd.concat([df_gap, kpi4, kpi5, kpi6, kpi7, kpi8], axis=1).reset_index()
     df_kpi = df_kpi.rename(columns={"f1_airport_from": "airport"})
+
+    # Drop rows that only have GAP KPIs
+    df_kpi = df_kpi.dropna(subset=["kpi4", "kpi5", "kpi6", "kpi7"])
+    df_kpi["kpi8"] = df_kpi["kpi8"].fillna(0)
 
     return df_kpi
 
 
-def get_weighted_kpi(df, preference):
-    """
-    This function returns a dataframe with weighted KPIs. The KPIs are rescaled (min-max) to a range of [0, 10].
-    If no preference is selected, every normalized value is multiplied by a weight of 10 (8 * 10 = 80).
-    If a preference is selected, the respective normalized value is multiplied by a weight of 30. The remaining
-    normalized values are multiplied by a weight of 50 / 7 (30 + 7 * (50/7) = 80).
-    """
+def get_weighted_kpi(df_unweighted, preference):
+
+    df = df_unweighted.copy()
+    df = df.set_index("airport")
+
+    transformer = QuantileTransformer(output_distribution="uniform")
+    df_norm = pd.DataFrame(
+        transformer.fit_transform(df),
+        columns=["kpi1", "kpi2", "kpi3", "kpi4", "kpi5", "kpi6", "kpi7", "kpi8"]
+    )
+
+    # switch cost indicators
+    df_norm["kpi6"] = 1 - df_norm["kpi6"]
+    df_norm["kpi7"] = 1 - df_norm["kpi7"]
+    df_norm["kpi8"] = 1 - df_norm["kpi8"]
 
     # Determine the weight per KPI
     if preference == "NA":
-        factor = 10
+        weight = 0.125
     else:
-        factor = 50 / 7
+        weight = 0.8 / 7
 
-    # To distinguish between preferential and non-preferential indicators
-    calc_max = ["kpi1", "kpi2", "kpi3", "kpi4", "kpi5"]
-
-    # Iterate over all columns to calculate the weighted KPI
-    for column in df:
-        if column == "airport":
-            continue
-        # KPI with preference
-        elif column == preference:
-            if column in calc_max:
-                df[(column + "_weighted")] = ((df[column] - df[column].min(skipna=True))
-                                              / (df[column].max(skipna=True) - df[column].min(skipna=True))
-                                              ) * 30
-            else:
-                df[(column + "_weighted")] = (1 - (df[column] - df[column].min(skipna=True))
-                                              / (df[column].max(skipna=True) - df[column].min(skipna=True))
-                                              ) * 30
-        # KPI without preference
+    # compute weighted KPIs
+    df_weighted = pd.DataFrame()
+    for column in df_norm:
+        if column == preference:
+            df_weighted[(column + "_weighted")] = df_norm[column] * 0.2
         else:
-            if column in calc_max:
-                df[(column + "_weighted")] = ((df[column] - df[column].min(skipna=True))
-                                              / (df[column].max(skipna=True) - df[column].min(skipna=True))
-                                              ) * factor
-            else:
-                df[(column + "_weighted")] = (1 - (df[column] - df[column].min(skipna=True))
-                                              / (df[column].max(skipna=True) - df[column].min(skipna=True))
-                                              ) * factor
+            df_weighted[(column + "_weighted")] = df_norm[column] * weight
 
-    # Total rating
-    df["rating"] = df[["kpi1_weighted", "kpi2_weighted", "kpi3_weighted", "kpi4_weighted",
-                       "kpi5_weighted", "kpi6_weighted", "kpi7_weighted", "kpi8_weighted"]].sum(axis=1) / 8
+    # create rating sum
+    df_rating = pd.DataFrame()
+    df_rating["rating"] = df_weighted.sum(axis=1) * 10
 
-    return df
+    # scaling so highest value is always 10
+    x = 100 / 2
+    if preference == "NA":
+        df_weighted = df_weighted * 80
+    else:
+        df_weighted = df_weighted * x
+
+    # copy rating sum
+    df_weighted["rating"] = df_rating["rating"]
+
+    df = df.reset_index()
+    df_final = pd.concat([df, df_weighted], axis=1)
+
+    return df_final

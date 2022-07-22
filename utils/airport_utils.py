@@ -191,7 +191,7 @@ def get_airport_details_fl(df):
 
 
 def get_airport_details_ap(df):
-    airports = pd.Series(df["airport"]).tolist()
+    airports = pd.Series(df.index).tolist()
 
     session = Session()
     a = aliased(Airport)

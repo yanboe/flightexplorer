@@ -1,13 +1,17 @@
 import plotly.graph_objects as go
-
 from dash import dcc
 
 config = {
     "staticPlot": True
 }
 
+kpi = [
+    "Flights (GAP)", "Airlines (GAP)", "Destinations", "Flights (ODP)",
+    "Airlines (ODP)", "Flight Duration", "Stops", "Layover Time"
+]
 
-def create_bar(row, df_prev):
+
+def create_apd_bar(row, df_prev):
 
     # Create dataframe with values of comparative period
     dff_prev = df_prev.loc[df_prev["airport"] == row.airport]
@@ -18,7 +22,7 @@ def create_bar(row, df_prev):
 
     dff_prev = dff_prev.drop(
         [
-            "airport", "rating",
+            "airport", "rating", "airport_name",
             "kpi1", "kpi2", "kpi3", "kpi4",
             "kpi5", "kpi6", "kpi7", "kpi8"
         ],
@@ -29,13 +33,8 @@ def create_bar(row, df_prev):
     # Create dataframe with values of selected period
     dff_sel = row.drop(["kpi1", "kpi2", "kpi3", "kpi4", "kpi5", "kpi6", "kpi7", "kpi8"])
     dff_sel_t = dff_sel.T
-    dff_sel_t = dff_sel_t.drop(["airport", "rating"]).reset_index()
+    dff_sel_t = dff_sel_t.drop(["airport", "rating", "airport_name"]).reset_index()
     df_s = dff_sel_t.set_axis(["theta", "r"], axis=1).reset_index(drop=True)
-
-    kpi = [
-        "Flights (GAP)", "Airlines (GAP)", "Destinations (GAP)", "Flights (ODP)",
-        "Airlines (ODP)", "Flight Duration (ODP)", "Stops (ODP)", "Layover Time (ODP)"
-    ]
 
     # annotation position of hline so they don't overlap
     if row.rating >= prev_hline:
@@ -110,7 +109,6 @@ def create_bar(row, df_prev):
         },
         yaxis={
             "title": "Score",
-            "range": [0, 10],
             "showgrid": False,
             "zeroline": True,
             "linecolor": "#868e96",

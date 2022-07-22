@@ -149,17 +149,16 @@ dash.register_page(
     Input("fl_sort_by", "value"),
     prevent_initial_call=True
 )
-def get_flightplan(airport_from, airport_to, flight_date, dep_time,
+def get_flightplan(ap_from, ap_to, flight_date, dep_time,
                    max_stops, flight_duration, layover_duration, sort_by):
 
-    if (airport_from is None or airport_to is None or flight_date is None or
-        flight_duration is None or layover_duration is None or sort_by is None):
+    if not all([ap_from, ap_to, flight_date, dep_time, max_stops, flight_duration, layover_duration, sort_by]):
         # Do not update if mandatory fields are empty
         raise PreventUpdate
 
     # Get list of airports based on selected value
-    origin = get_airports_by_key(airport_from)
-    destination = get_airports_by_key(airport_to)
+    origin = get_airports_by_key(ap_from)
+    destination = get_airports_by_key(ap_to)
 
     # datetime from/to
     date_no_tz = datetime.strptime(flight_date, "%Y-%m-%d")
@@ -196,8 +195,9 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
     if not df_flights.empty:
         # drop flights that take longer than flight_duration
         flight_duration_s = flight_duration * 3600
-        df_flights.drop(df_flights[df_flights.total_duration_s > flight_duration_s].index, inplace=True)
+        df_flights = df_flights.drop(df_flights[df_flights.total_duration_s > flight_duration_s].index)
 
+    if not df_flights.empty:
         # sort df_flights according to input value
         if sort_by == "dur":
             df_flights = df_flights.sort_values(["total_duration_s"], ascending=[True])
@@ -861,7 +861,7 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
     # add subcontent
     content.append(subcontent)
 
-    return content, sort_by, dep_time, max_stops, dash.no_update
+    return content, sort_by, dep_time, max_stops, []
 
 
 @callback(
@@ -869,7 +869,6 @@ def get_flightplan(airport_from, airport_to, flight_date, dep_time,
     Input("fl_airport_to", "value")
 )
 def get_airport_to(value):
-    print("fl airport to")
     return get_airports_to()
 
 
@@ -878,5 +877,4 @@ def get_airport_to(value):
     Input("fl_airport_from", "value")
 )
 def get_airport_from(value):
-    print("fl airport from")
     return get_airports_from("fl")

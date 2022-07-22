@@ -24,7 +24,7 @@ def create_header():
                                                         [
                                                             dmc.ThemeIcon(
                                                                 DashIconify(
-                                                                    icon="cil:airplane-mode",
+                                                                    icon="ic:round-airplanemode-active",
                                                                     width=22,
                                                                     rotate=1
                                                                 ),
@@ -33,7 +33,7 @@ def create_header():
                                                                 variant="light",
                                                                 color="blue"
                                                             ),
-                                                            dmc.Text("Flight Planner", size="xl", color="gray"),
+                                                            dmc.Text("Airport Explorer", size="xl", color="gray"),
                                                         ]
                                                     )
                                                 ],
@@ -48,16 +48,16 @@ def create_header():
                                                         [
                                                             dmc.ThemeIcon(
                                                                 DashIconify(
-                                                                    icon="cil:airplane-mode",
+                                                                    icon="ic:round-airplanemode-active",
                                                                     width=22,
-                                                                    rotate=1
+                                                                    rotate=3
                                                                 ),
                                                                 radius=30,
                                                                 size=36,
                                                                 variant="light",
                                                                 color="blue"
                                                             ),
-                                                            dmc.Text("FliPlan", size="xl", color="gray"),
+                                                            dmc.Text("", size="xl", color="gray"),
                                                         ]
                                                     )
                                                 ],
@@ -261,7 +261,7 @@ def create_form(page):
                         sm=6,
                         xs=12
                     ),
-                    # DatePicker for flights
+                    # DatePicker (Flights) / DateRangePicker (Airports)
                     dmc.Col(
                         [
                             html.Div(
@@ -276,21 +276,8 @@ def create_form(page):
                                         clearable=False,
                                         id=(page + "_date")
                                     )
-                                ]
-                            ),
-                        ],
-                        lg=4,
-                        md=4,
-                        sm=12,
-                        xs=12
-                    )
-                    if page == "fl"
-                    else
-                    # DateRangePicker for airports
-                    dmc.Col(
-                        [
-                            html.Div(
-                                [
+                                    if page == "fl"
+                                    else
                                     dmc.DateRangePicker(
                                         minDate=date(2019, 1, 1),
                                         maxDate=date(2022, 3, 31),
@@ -310,7 +297,7 @@ def create_form(page):
                         sm=12,
                         xs=12
                     ),
-                    # Departure Time for flights
+                    # Departure Time (Flights) / Comparison Period (Airports)
                     dmc.Col(
                         [
                             html.Div(
@@ -330,28 +317,15 @@ def create_form(page):
                                         maxDropdownHeight=500,
                                         id=(page + "_dep_time")
                                     )
-                                ]
-                            ),
-                        ],
-                        lg=6,
-                        md=6,
-                        sm=6,
-                        xs=12
-                    )
-                    if page == "fl"
-                    else
-                    # Comparison period
-                    dmc.Col(
-                        [
-                            html.Div(
-                                [
+                                    if page == "fl"
+                                    else
                                     dmc.Select(
                                         data=[
                                             {"value": "7", "label": "Last week"},
                                             {"value": "30", "label": "Last month"},
                                             {"value": "365", "label": "Last year"}
                                         ],
-                                        label="Comparison period",
+                                        label="Comparison Period",
                                         size="md",
                                         value="7",
                                         icon=[DashIconify(icon="ic:outline-calendar-month", width=25)],
@@ -359,14 +333,14 @@ def create_form(page):
                                         id=(page + "_period")
                                     )
                                 ]
-                            )
+                            ),
                         ],
                         lg=6,
                         md=6,
                         sm=6,
                         xs=12
                     ),
-                    # Max Stops for flights
+                    # Max Stops
                     dmc.Col(
                         [
                             html.Div(
@@ -384,21 +358,8 @@ def create_form(page):
                                         icon=[DashIconify(icon="ic:round-airline-stops", width=25)],
                                         id=(page + "_max_stops"),
                                     )
-                                ]
-                            ),
-                        ],
-                        lg=6,
-                        md=6,
-                        sm=6,
-                        xs=12,
-                    )
-                    if page == "fl"
-                    else
-                    # Max Stops for airports
-                    dmc.Col(
-                        [
-                            html.Div(
-                                [
+                                    if page == "fl"
+                                    else
                                     dmc.Select(
                                         data=[
                                             {"label": "Nonstop only", "value": "0"},

@@ -6,8 +6,8 @@ def get_map_lines(df_flights, df_airports):
 
     lod_map_lines = []
     colors = [
-        "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99",
-        "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a"
+        "#6a3d9a", "#cab2d6", "#ff7f00", "#fdbf6f", "#e31a1c",
+        "#fb9a99", "#33a02c", "#b2df8a", "#1f78b4", "#a6cee3"
     ]
     i = 0
 

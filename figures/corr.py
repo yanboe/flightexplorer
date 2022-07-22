@@ -1,11 +1,7 @@
 import dash_mantine_components as dmc
+import numpy as np
 import plotly.express as px
-
 from dash import dcc
-
-config = {
-    "scrollZoom": True
-}
 
 kpi = [
     "Flights (GAP)", "Airlines (GAP)", "Destinations", "Flights (ODP)",
@@ -13,31 +9,24 @@ kpi = [
 ]
 
 
-def create_heatmap(title, description, df):
-    df = df.set_index("airport")
+def create_corr_heatmap(title, description, df):
+    # Create correlation matrix
+    df_corr = df[["kpi1", "kpi2", "kpi3", "kpi4", "kpi5", "kpi6", "kpi7", "kpi8"]].corr(method="pearson")
 
-    # Create customdata
-    airport_names = [df.airport_name for i in range(8)]
-    customdata = list(map(list, zip(*airport_names)))
+    # Remove upper triangle of the array and invert it (so we keep the diagonal correlations of 1)
+    mask = np.invert(np.tril(np.ones_like(df_corr, dtype=bool)))
+    df_corr = df_corr.mask(mask)
 
     fig = px.imshow(
-        df[["kpi1_weighted", "kpi2_weighted", "kpi3_weighted", "kpi4_weighted",
-            "kpi5_weighted", "kpi6_weighted", "kpi7_weighted", "kpi8_weighted"]],
+        df_corr,
         x=kpi,
+        y=kpi,
         text_auto=".2f",
         aspect="auto",
-        labels={
-            "x": "Indicator",
-            "y": "Airport",
-            "color": "Rating"
-        }
     )
     fig.update_traces(
-        customdata=customdata,
-        hovertemplate=
-        "<b>%{customdata}</b><br><br>" +
-        "Indicator: %{x}<br>" +
-        "Rating: %{z:.2f}<extra></extra>"
+        hovertemplate="%{y} vs. %{x}<extra></extra>",
+        hoverongaps=False
     )
     fig.update_layout(
         margin={"r": 0, "t": 20, "l": 0, "b": 20},
@@ -65,7 +54,7 @@ def create_heatmap(title, description, df):
         [
             dmc.Text(title, weight=300, style={"fontSize": 26}),
             dmc.Text(description, color="dimmed"),
-            dcc.Graph(figure=fig, id="fig_heatmap", config=config),
+            dcc.Graph(figure=fig, id="fig_corr_heatmap"),
         ],
         p="lg",
         radius="sm",

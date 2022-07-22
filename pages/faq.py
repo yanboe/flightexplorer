@@ -5,7 +5,7 @@ from dash import html
 
 layout = html.Div(
     [
-        dmc.Text("Frequently Asked Questions")
+        dmc.Text("Coming soon!")
     ]
 )
 

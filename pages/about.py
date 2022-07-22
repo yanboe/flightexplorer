@@ -32,7 +32,7 @@ layout = dmc.Container(
                         ),
                         html.Div(
                             [
-                                dmc.Text("Software Engineer & Student", size="xs", transform="uppercase", weight=700, color="dimmed"),
+                                dmc.Text("Software Engineer & Master's Student", size="xs", transform="uppercase", weight=700, color="dimmed"),
                                 dmc.Text("Yannik Böni", size="lg", weight=500),
                                 dmc.Text("yannik.boeni@stud.fhgr.ch", size="xs", color="dimmed"),
                             ]
