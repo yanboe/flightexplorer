@@ -290,7 +290,8 @@ layout = dmc.Container(
 dash.register_page(
     __name__,
     path="/",
-    name="Home",
-    title="Home",
+    name="Airport Explorer",
+    title="Airport Explorer",
+    description="Airport Explorer",
     layout=layout
 )
