@@ -1,7 +1,7 @@
 import dash
 import dash_mantine_components as dmc
 
-from dash import html, dcc
+from dash import html
 
 layout = dmc.Container(
     [
