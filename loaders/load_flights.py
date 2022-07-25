@@ -4,7 +4,7 @@ from db import Session
 import os
 
 
-airport_fix = {"KS67", "LSMF", "LTFG", "SCTJ", "YADY", "YPEC", "YSCH"}
+airport_fix = {"KS67", "LSMF", "LTFG", "SCTJ", "YADY", "YPEC", "YSCH", "LSZM"}
 
 
 def change_to_null(x):
@@ -30,6 +30,8 @@ def check_airport(airport):
             return "YLMQ"
         elif airport == "YSCH":
             return "YCFS"
+        elif airport == "LSZM":
+            return "LFSB"
         else:
             return airport
     else:
@@ -38,7 +40,7 @@ def check_airport(airport):
 
 # Create list of valid airports
 airport_baseline = set()
-with open("../../data/airport_baseline.csv") as file:
+with open("../data/airport_baseline.csv") as file:
     reader = csv.reader(file, delimiter=",")
     next(reader)  # skip header
     for row in reader:
@@ -47,14 +49,14 @@ with open("../../data/airport_baseline.csv") as file:
 
 # Create list of valid airlines
 airline_baseline = set()
-with open("../../data/airline_baseline.csv") as file:
+with open("../data/airline_baseline.csv") as file:
     reader = csv.reader(file, delimiter=",")
     next(reader)  # skip header
     for row in reader:
         airline_baseline.add(row[3])
 
 # Set directory and initialize statistics
-directory = "../../data/flights/"
+directory = "../data/flights/"
 count_insert_total = 0
 count_skip_total = 0
 

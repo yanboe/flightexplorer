@@ -1,11 +1,5 @@
-import dash_mantine_components as dmc
 import plotly.express as px
 
-from dash import dcc
-
-config = {
-    "scrollZoom": True
-}
 
 kpi = [
     "Flights (GAP)", "Airlines (GAP)", "Destinations", "Flights (ODP)",
@@ -13,7 +7,7 @@ kpi = [
 ]
 
 
-def create_heatmap(title, description, df):
+def create_heatmap(df):
     df = df.set_index("airport")
 
     # Create customdata
@@ -61,14 +55,4 @@ def create_heatmap(title, description, df):
         coloraxis_showscale=False
     )
 
-    return dmc.Paper(
-        [
-            dmc.Text(title, weight=300, style={"fontSize": 26}),
-            dmc.Text(description, color="dimmed"),
-            dcc.Graph(figure=fig, id="fig_heatmap", config=config),
-        ],
-        p="lg",
-        radius="sm",
-        withBorder=True,
-        mb=15
-    )
+    return fig

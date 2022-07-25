@@ -11,10 +11,11 @@ from itertools import islice
 
 from figures.apd_bar import create_apd_bar
 from figures.corr import create_corr_heatmap
+from figures.dist import create_dist
 from figures.heatmap import create_heatmap
 from figures.viz_bar import create_viz_bar
 from layout.appshell import create_form
-from layout.utils import create_kpi, create_display_diff
+from layout.utils import create_kpi, create_display_diff, create_period_selector
 from lib.flights import get_flights
 from lib.gap import get_gap
 from lib.kpi import get_unweighted_kpi, get_weighted_kpi
@@ -332,12 +333,12 @@ def get_ap_content(df, df_prev, weight, active_tab):
                 size="sm",
                 label="Preference",
                 value=weight,
-                icon=[DashIconify(icon="ic:outline-scale", width=25)],
+                icon=[DashIconify(icon="healthicons:ui-preferences", width=25)],
                 style={
                     "width": 180
                 },
                 id="ap_weight"
-            )
+            ),
         ],
         position="apart",
         align="flex-start",
@@ -617,7 +618,7 @@ def get_ap_content(df, df_prev, weight, active_tab):
             # Airport Details
             dmc.Tab(
                 [
-                    dmc.Text("Airport ranking", weight=400, style={"fontSize": 26}),
+                    dmc.Text("Airport Ranking", weight=400, style={"fontSize": 26}),
                     dmc.Text(
                         [
                             "The numbers shown below are calculated using a Weighted Sum Model and represent relative "
@@ -651,39 +652,105 @@ def get_ap_content(df, df_prev, weight, active_tab):
                     ),
                     html.Div(
                         [
-                            # Static Heatmap
-                            create_heatmap("Title coming soon", "Description coming soon", df_kpi),
-
-                            # Interactive Horizontal Bar Chart
+                            # Heatmap
                             dmc.Paper(
                                 [
                                     dmc.Group(
                                         [
                                             html.Div(
                                                 [
-                                                    dmc.Text("Title coming soon", weight=300, style={"fontSize": 26}),
-                                                    dmc.Text("Description coming soon", color="dimmed"),
+                                                    dmc.Text(
+                                                        [
+                                                            "Airport-Indicator Matrix"
+                                                        ],
+                                                        weight=300,
+                                                        style={"fontSize": 26}
+                                                    ),
+                                                    dmc.Text(
+                                                        [
+                                                            "The matrix below shows the normalized and scaled rating ",
+                                                            "scores. It's main purpose is to provide a fast overview ",
+                                                            "on how the ratings are distributed over all selected ",
+                                                            "airports and indicators. It also allows to see outliers ",
+                                                            "in the data. The lighter the color, the higher the ",
+                                                            "rating."
+                                                        ],
+                                                        color="dimmed"
+                                                    ),
                                                 ]
                                             ),
-                                            # Dropdown for KPI that should be displayed
-                                            dmc.Select(
-                                                data=[
-                                                    {"label": "Flights (GAP)", "value": "kpi1"},
-                                                    {"label": "Airlines (GAP)", "value": "kpi2"},
-                                                    {"label": "Destinations", "value": "kpi3"},
-                                                    {"label": "Flights (ODP)", "value": "kpi4"},
-                                                    {"label": "Airlines (ODP)", "value": "kpi5"},
-                                                    {"label": "Flight Duration", "value": "kpi6"},
-                                                    {"label": "Stops", "value": "kpi7"},
-                                                    {"label": "Layover Time", "value": "kpi8"},
-                                                ],
-                                                radius="xl",
-                                                size="sm",
-                                                value="kpi1",
-                                                style={
-                                                    "width": 150
-                                                },
-                                                id="viz_kpi"
+                                            # Period
+                                            create_period_selector("viz_heatmap_period"),
+
+                                        ],
+                                        position="apart",
+                                        align="flex-start",
+                                        style={"marginBottom": 15}
+                                    ),
+                                    dcc.Graph(
+                                        figure=create_heatmap(df_kpi),
+                                        id="fig_viz_heatmap",
+                                        config={"scrollZoom": True}
+                                    )
+                                ],
+                                p="lg",
+                                radius="sm",
+                                withBorder=True,
+                                mb=15
+                            ),
+
+                            # Horizontal Bar Chart
+                            dmc.Paper(
+                                [
+                                    dmc.Group(
+                                        [
+                                            html.Div(
+                                                [
+                                                    dmc.Text(
+                                                        [
+                                                            "Absolute Values by Airport and Indicator"
+                                                        ],
+                                                        weight=300,
+                                                        style={"fontSize": 26}
+                                                    ),
+                                                    dmc.Text(
+                                                        [
+                                                            "The following graph shows the absolute values of the ",
+                                                            "selected period and indicator per airport. It provides ",
+                                                            "additional information on how the airports compare ",
+                                                            "against each other without the distortion of the ",
+                                                            "normalized rating."
+                                                        ],
+                                                        color="dimmed"
+                                                    ),
+                                                ]
+                                            ),
+                                            dmc.Group(
+                                                [
+                                                    # Period
+                                                    create_period_selector("viz_bar_period"),
+
+                                                    # Dropdown for KPI that should be displayed
+                                                    dmc.Select(
+                                                        data=[
+                                                            {"label": "Flights (GAP)", "value": "kpi1"},
+                                                            {"label": "Airlines (GAP)", "value": "kpi2"},
+                                                            {"label": "Destinations", "value": "kpi3"},
+                                                            {"label": "Flights (ODP)", "value": "kpi4"},
+                                                            {"label": "Airlines (ODP)", "value": "kpi5"},
+                                                            {"label": "Flight Duration", "value": "kpi6"},
+                                                            {"label": "Stops", "value": "kpi7"},
+                                                            {"label": "Layover Time", "value": "kpi8"},
+                                                        ],
+                                                        radius="xl",
+                                                        size="sm",
+                                                        value="kpi1",
+                                                        style={
+                                                            "width": 150
+                                                        },
+                                                        id="viz_kpi"
+                                                    ),
+                                                ]
                                             )
                                         ],
                                         position="apart",
@@ -703,9 +770,140 @@ def get_ap_content(df, df_prev, weight, active_tab):
                             ),
 
                             # Correlation Heatmap
-                            html.Div(
-                                create_corr_heatmap("Title coming soon", "Description coming soon", df_kpi)
+                            dmc.Paper(
+                                [
+                                    dmc.Group(
+                                        [
+                                            html.Div(
+                                                [
+                                                    dmc.Text(
+                                                        [
+                                                            "Correlation between Indicators"
+                                                        ],
+                                                        weight=300,
+                                                        style={"fontSize": 26}
+                                                    ),
+                                                    dmc.Text(
+                                                        [
+                                                            "The graph below shows potential correlations between ",
+                                                            "the different indicators. Using the dropdown, you can",
+                                                            "test different methods of correlation. Since the ",
+                                                            "distribution of most indicators is skewed, a ",
+                                                            "nonparametric method (Spearman, Kendall) is recommended. ",
+                                                            "The skewness is mainly caused by a few large airports ",
+                                                            "dominating a region. The distribution of the indicators ",
+                                                            "can be seen further down."
+                                                        ],
+                                                        color="dimmed"
+                                                    ),
+                                                ]
+                                            ),
+                                            dmc.Group(
+                                                [
+                                                    # Period
+                                                    create_period_selector("viz_corr_period"),
+
+                                                    # Correlation method
+                                                    dmc.Select(
+                                                        data=[
+                                                            {"label": "Pearson", "value": "pearson"},
+                                                            {"label": "Spearman", "value": "spearman"},
+                                                            {"label": "Kendall", "value": "kendall"}
+                                                        ],
+                                                        radius="xl",
+                                                        size="sm",
+                                                        value="spearman",
+                                                        style={
+                                                            "width": 150
+                                                        },
+                                                        id="viz_corr_method"
+                                                    )
+                                                ]
+                                            )
+                                        ],
+                                        position="apart",
+                                        align="flex-start",
+                                        style={"marginBottom": 15}
+                                    ),
+                                    dcc.Graph(
+                                        figure=create_corr_heatmap(df_kpi, "spearman"),
+                                        id="fig_viz_corr"
+                                    )
+                                ],
+                                p="lg",
+                                radius="sm",
+                                withBorder=True,
+                                mb=15
+                            ),
+
+                            # Distribution
+                            dmc.Paper(
+                                [
+                                    dmc.Group(
+                                        [
+                                            html.Div(
+                                                [
+                                                    dmc.Text(
+                                                        [
+                                                            "Indicator Distribution"
+                                                        ],
+                                                        weight=300,
+                                                        style={"fontSize": 26}
+                                                    ),
+                                                    dmc.Text(
+                                                        [
+                                                            "The boxplot below either visualizes the distribution of ",
+                                                            "all indicators together (z-scores) or for a single ",
+                                                            "indicator (absolute values)."
+                                                        ],
+                                                        color="dimmed"
+                                                    )
+                                                ],
+                                            ),
+                                            dmc.Group(
+                                                [
+                                                    # Period
+                                                    create_period_selector("viz_dist"),
+
+                                                    # Dropdown for KPI that should be displayed
+                                                    dmc.Select(
+                                                        data=[
+                                                            {"label": "All Indicators", "value": "all"},
+                                                            {"label": "Flights (GAP)", "value": "kpi1"},
+                                                            {"label": "Airlines (GAP)", "value": "kpi2"},
+                                                            {"label": "Destinations", "value": "kpi3"},
+                                                            {"label": "Flights (ODP)", "value": "kpi4"},
+                                                            {"label": "Airlines (ODP)", "value": "kpi5"},
+                                                            {"label": "Flight Duration", "value": "kpi6"},
+                                                            {"label": "Stops", "value": "kpi7"},
+                                                            {"label": "Layover Time", "value": "kpi8"},
+                                                        ],
+                                                        radius="xl",
+                                                        size="sm",
+                                                        value="all",
+                                                        style={
+                                                            "width": 150
+                                                        },
+                                                        id="viz_dist_kpi"
+                                                    ),
+                                                ]
+                                            )
+                                        ],
+                                        position="apart",
+                                        align="flex-start",
+                                        style={"marginBottom": 15}
+                                    ),
+                                    dcc.Graph(
+                                        figure=create_dist(df_kpi, "all"),
+                                        id="fig_viz_dist"
+                                    )
+                                ],
+                                p="lg",
+                                radius="sm",
+                                withBorder=True,
+                                mb=15
                             )
+
                         ],
                         style={
                             "marginBottom": 20
@@ -757,11 +955,66 @@ def put_active_tab(active_tab):
 
 @callback(
     Output("fig_viz_bar", "figure"),
+    Input("viz_bar_period", "value"),
     Input("viz_kpi", "value"),
     State("df_weighted_kpi", "data"),
+    State("df_weighted_kpi_prev", "data"),
     prevent_initial_call=True
 )
-def update_viz_bar(kpi, df):
-    df_kpi = pd.read_json(df, orient="split")
+def update_viz_bar(period, kpi, df, df_prev):
+    if period == "sp":
+        df_kpi = pd.read_json(df, orient="split")
+    else:
+        df_kpi = pd.read_json(df_prev, orient="split")
 
     return create_viz_bar(df_kpi, kpi)
+
+
+@callback(
+    Output("fig_viz_heatmap", "figure"),
+    Input("viz_heatmap_period", "value"),
+    State("df_weighted_kpi", "data"),
+    State("df_weighted_kpi_prev", "data"),
+    prevent_initial_call=True
+)
+def update_viz_heatmap(period, df, df_prev):
+    if period == "sp":
+        df_kpi = pd.read_json(df, orient="split")
+    else:
+        df_kpi = pd.read_json(df_prev, orient="split")
+
+    return create_heatmap(df_kpi)
+
+
+@callback(
+    Output("fig_viz_corr", "figure"),
+    Input("viz_corr_period", "value"),
+    Input("viz_corr_method", "value"),
+    State("df_weighted_kpi", "data"),
+    State("df_weighted_kpi_prev", "data"),
+    prevent_initial_call=True
+)
+def update_viz_heatmap(period, method, df, df_prev):
+    if period == "sp":
+        df_kpi = pd.read_json(df, orient="split")
+    else:
+        df_kpi = pd.read_json(df_prev, orient="split")
+
+    return create_corr_heatmap(df_kpi, method)
+
+
+@callback(
+    Output("fig_viz_dist", "figure"),
+    Input("viz_dist", "value"),
+    Input("viz_dist_kpi", "value"),
+    State("df_weighted_kpi", "data"),
+    State("df_weighted_kpi_prev", "data"),
+    prevent_initial_call=True
+)
+def update_viz_bar(period, kpi, df, df_prev):
+    if period == "sp":
+        df_kpi = pd.read_json(df, orient="split")
+    else:
+        df_kpi = pd.read_json(df_prev, orient="split")
+
+    return create_dist(df_kpi, kpi)

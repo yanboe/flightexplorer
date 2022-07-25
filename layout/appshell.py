@@ -268,8 +268,8 @@ def create_form(page):
                                 [
                                     dmc.DatePicker(
                                         minDate=date(2019, 1, 1),
-                                        maxDate=date(2022, 3, 31),
-                                        value=date(2019, 6, 11),
+                                        maxDate=date(2022, 6, 30),
+                                        value=date(2022, 5, 11),
                                         inputFormat="MMM D, YYYY",
                                         icon=[DashIconify(icon="ic:outline-calendar-month", width=25)],
                                         size="lg",
@@ -280,8 +280,8 @@ def create_form(page):
                                     else
                                     dmc.DateRangePicker(
                                         minDate=date(2019, 1, 1),
-                                        maxDate=date(2022, 3, 31),
-                                        value=[date(2019, 6, 11), date(2019, 6, 18)],
+                                        maxDate=date(2022, 6, 30),
+                                        value=[date(2022, 5, 11), date(2022, 5, 18)],
                                         inputFormat="MMM D, YYYY",
                                         icon=[DashIconify(icon="ic:outline-calendar-month", width=25)],
                                         allowSingleDateInRange=True,

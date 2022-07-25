@@ -73,3 +73,16 @@ def create_display_diff(now, prev):
         return f" ({diff:+})"
     else:
         return f" ({diff:+.2f})"
+
+
+def create_period_selector(viz_id):
+    return dmc.Chips(
+        data=[
+            {"label": "Selected Period", "value": "sp"},
+            {"label": "Previous Period", "value": "pp"},
+        ],
+        radius="xl",
+        size="sm",
+        value="sp",
+        id=viz_id
+    )

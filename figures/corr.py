@@ -1,7 +1,6 @@
-import dash_mantine_components as dmc
 import numpy as np
 import plotly.express as px
-from dash import dcc
+
 
 kpi = [
     "Flights (GAP)", "Airlines (GAP)", "Destinations", "Flights (ODP)",
@@ -9,9 +8,9 @@ kpi = [
 ]
 
 
-def create_corr_heatmap(title, description, df):
+def create_corr_heatmap(df, method):
     # Create correlation matrix
-    df_corr = df[["kpi1", "kpi2", "kpi3", "kpi4", "kpi5", "kpi6", "kpi7", "kpi8"]].corr(method="pearson")
+    df_corr = df[["kpi1", "kpi2", "kpi3", "kpi4", "kpi5", "kpi6", "kpi7", "kpi8"]].corr(method=method)
 
     # Remove upper triangle of the array and invert it (so we keep the diagonal correlations of 1)
     mask = np.invert(np.tril(np.ones_like(df_corr, dtype=bool)))
@@ -50,14 +49,4 @@ def create_corr_heatmap(title, description, df):
         coloraxis_showscale=False
     )
 
-    return dmc.Paper(
-        [
-            dmc.Text(title, weight=300, style={"fontSize": 26}),
-            dmc.Text(description, color="dimmed"),
-            dcc.Graph(figure=fig, id="fig_corr_heatmap"),
-        ],
-        p="lg",
-        radius="sm",
-        withBorder=True,
-        mb=15
-    )
+    return fig
