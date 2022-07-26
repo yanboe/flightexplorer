@@ -22,16 +22,9 @@ def create_header():
                                                 [
                                                     dmc.Group(
                                                         [
-                                                            dmc.ThemeIcon(
-                                                                DashIconify(
-                                                                    icon="ic:round-airplanemode-active",
-                                                                    width=22,
-                                                                    rotate=1
-                                                                ),
-                                                                radius=30,
-                                                                size=36,
-                                                                variant="light",
-                                                                color="blue"
+                                                            dmc.Image(
+                                                                src="../assets/app.svg",
+                                                                width=50
                                                             ),
                                                             dmc.Text("Airport Explorer", size="xl", color="gray"),
                                                         ]
@@ -46,16 +39,9 @@ def create_header():
                                                 [
                                                     dmc.Group(
                                                         [
-                                                            dmc.ThemeIcon(
-                                                                DashIconify(
-                                                                    icon="ic:round-airplanemode-active",
-                                                                    width=22,
-                                                                    rotate=3
-                                                                ),
-                                                                radius=30,
-                                                                size=36,
-                                                                variant="light",
-                                                                color="blue"
+                                                            dmc.Image(
+                                                                src="../assets/app.svg",
+                                                                width=50
                                                             ),
                                                             dmc.Text("", size="xl", color="gray"),
                                                         ]

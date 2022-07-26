@@ -189,9 +189,9 @@ layout = dmc.Container(
                                                         "users to compare airports in their region to find the one ",
                                                         "best suited to their needs.",
                                                         dmc.Space(h=10),
-                                                        "The data for this project is provided by the ",
+                                                        "The data for this project is provided by ",
                                                         html.A(
-                                                            "OpenSky Network",
+                                                            "The OpenSky Network",
                                                             href="https://opensky-network.org/",
                                                             target="_blank",
                                                             style={
