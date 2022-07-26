@@ -21,7 +21,7 @@ layout = html.Div(
 dash.register_page(
     __name__,
     path="/404/",
-    name="Error 404 (Not Found)",
-    title="Error 404 (Not Found)",
+    title="Error 404 (Not Found) | Airport Explorer",
+    description="Error 404: Requested page not found",
     layout=layout
 )

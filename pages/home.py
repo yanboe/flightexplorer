@@ -290,8 +290,7 @@ layout = dmc.Container(
 dash.register_page(
     __name__,
     path="/",
-    name="Airport Explorer",
     title="Airport Explorer",
-    description="Airport Explorer",
+    description="Explore flights and compare airports in your region to find the best one for your needs.",
     layout=layout
 )

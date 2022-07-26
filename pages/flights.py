@@ -127,11 +127,12 @@ layout = [create_form("fl"), page_content]
 dash.register_page(
     __name__,
     path="/flights/",
-    name="Explore Flights",
-    title="Explore Flights",
+    title="Explore Flights | Airport Explorer",
+    description="Explore flights from an airport or a region to your destination.",
     layout=layout
 )
 
+print(dash.page_registry)
 
 @callback(
     Output("fl_content", "children"),

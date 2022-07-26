@@ -12,7 +12,7 @@ layout = dmc.Container(
                     children=[
                         dmc.Container(
                             [
-                                dmc.Text("Data Source", style={"fontSize": 22}),
+                                dmc.Text("Flights: Data Source", style={"fontSize": 22}),
                                 html.P(
                                     [
                                         'Matthias Schäfer, Martin Strohmeier, Vincent Lenders, Ivan Martinovic and '
@@ -37,7 +37,7 @@ layout = dmc.Container(
                                         )
                                     ],
                                 ),
-                                dmc.Text("Processing Library", style={"fontSize": 22}),
+                                dmc.Text("Flights: Processing Library", style={"fontSize": 22}),
                                 html.P(
                                     [
                                         'Xavier Olive. "Traffic, a toolbox for processing and analysing '
@@ -63,7 +63,7 @@ layout = dmc.Container(
 dash.register_page(
     __name__,
     path="/faq/",
-    name="FAQ",
-    title="FAQ",
+    title="FAQ | Airport Explorer",
+    description="Frequently Asked Questions about Airport Explorer",
     layout=layout
 )

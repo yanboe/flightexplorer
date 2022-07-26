@@ -145,8 +145,8 @@ layout = [create_form("ap"), page_content]
 dash.register_page(
     __name__,
     path="/airports/",
-    name="Compare Airports",
-    title="Compare Airports",
+    title="Compare Airports | Airport Explorer",
+    description="Compare airports in your region to find the best one for your needs.",
     layout=layout
 )
 
