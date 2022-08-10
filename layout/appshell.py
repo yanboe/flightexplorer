@@ -120,6 +120,25 @@ def create_navbar():
                         style={"textDecoration": "none"}
                     ),
 
+                    # /airports/
+                    dcc.Link(
+                        [
+                            dmc.Group(
+                                [
+                                    dmc.ThemeIcon(
+                                        DashIconify(icon="ic:round-ssid-chart", width=18),
+                                        size=30,
+                                        radius=30,
+                                        variant="light"
+                                    ),
+                                    dmc.Text("Compare Airports", size="sm", color="gray")
+                                ]
+                            )
+                        ],
+                        href="/airports/",
+                        style={"textDecoration": "none"}
+                    ),
+
                     # /flights/
                     dcc.Link(
                         [
@@ -139,24 +158,6 @@ def create_navbar():
                         style={"textDecoration": "none"}
                     ),
 
-                    # /airports/
-                    dcc.Link(
-                        [
-                            dmc.Group(
-                                [
-                                    dmc.ThemeIcon(
-                                        DashIconify(icon="ic:round-ssid-chart", width=18),
-                                        size=30,
-                                        radius=30,
-                                        variant="light"
-                                    ),
-                                    dmc.Text("Compare Airports", size="sm", color="gray")
-                                ]
-                            )
-                        ],
-                        href="/airports/",
-                        style={"textDecoration": "none"}
-                    ),
                     dmc.Divider(style={"marginBottom": 20, "marginTop": 20}),
 
                     # /faq/

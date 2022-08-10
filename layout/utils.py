@@ -36,24 +36,32 @@ def create_figure():
 
 def create_kpi(title, row, df, airport, kpi):
     # KPI value of selected period
-    value = row[kpi]
+    value = row[(kpi + "_weighted")]
+    absolute_value = ("Absolute Value: " + f"{row[kpi]:.2f}")
 
     # KPI value of previous period
     df = df.set_index("airport")
-    value_prev = df.loc[airport][kpi]
+    value_prev = df.loc[airport][(kpi + "_weighted")]
 
     # Calculate difference and format it with +/- sign (e.g. 3.13 -> +3.13)
     diff = create_display_diff(value, value_prev)
 
     return dmc.Col(
         [
-            dmc.Text(title, color="dimmed", size="xs", style={"lineHeight": 1.3}),
-            dmc.Text(f"{value:.2f}", weight=500, style={"fontSize": 24, "lineHeight": 1.3}),
-            dmc.Text(
-                ("Previous period: ", f"{value_prev:.2f}", diff),
-                size="xs",
-                color="dimmed",
-                style={"lineHeight": 1.3}
+            dmc.Tooltip(
+                [
+                    dmc.Text(title, color="dimmed", size="xs", style={"lineHeight": 1.3}),
+                    dmc.Text(f"{value:.2f}", weight=500, style={"fontSize": 24, "lineHeight": 1.3}),
+                    dmc.Text(
+                        ("Previous period: ", f"{value_prev:.2f}", diff),
+                        size="xs",
+                        color="dimmed",
+                        style={"lineHeight": 1.3}
+                    )
+                ],
+                label=absolute_value,
+                withArrow=True,
+                arrowSize=3
             )
         ],
         lg=3,

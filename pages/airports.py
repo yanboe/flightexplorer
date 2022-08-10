@@ -551,14 +551,14 @@ def get_ap_content(df, df_prev, weight, active_tab):
                 dmc.Grid(
                     [
                         # Create KPIs
-                        create_kpi("GAP · Flights", row, df_kpi_prev, row.airport, "kpi1_weighted"),
-                        create_kpi("GAP · Airlines", row, df_kpi_prev, row.airport, "kpi2_weighted"),
-                        create_kpi("GAP · Destinations", row, df_kpi_prev, row.airport, "kpi3_weighted"),
-                        create_kpi("ODP · Flights", row, df_kpi_prev, row.airport, "kpi4_weighted"),
-                        create_kpi("ODP · Airlines", row, df_kpi_prev, row.airport, "kpi5_weighted"),
-                        create_kpi("ODP · Flight Duration", row, df_kpi_prev, row.airport, "kpi6_weighted"),
-                        create_kpi("ODP · Stops", row, df_kpi_prev, row.airport, "kpi7_weighted"),
-                        create_kpi("ODP · Layover Time", row, df_kpi_prev, row.airport, "kpi8_weighted"),
+                        create_kpi("GAP · Flights", row, df_kpi_prev, row.airport, "kpi1"),
+                        create_kpi("GAP · Airlines", row, df_kpi_prev, row.airport, "kpi2"),
+                        create_kpi("GAP · Destinations", row, df_kpi_prev, row.airport, "kpi3"),
+                        create_kpi("ODP · Flights", row, df_kpi_prev, row.airport, "kpi4"),
+                        create_kpi("ODP · Airlines", row, df_kpi_prev, row.airport, "kpi5"),
+                        create_kpi("ODP · Flight Duration", row, df_kpi_prev, row.airport, "kpi6"),
+                        create_kpi("ODP · Stops", row, df_kpi_prev, row.airport, "kpi7"),
+                        create_kpi("ODP · Layover Time", row, df_kpi_prev, row.airport, "kpi8"),
                     ]
                 ),
                 dmc.Divider(variant="solid", style={"marginTop": 10, "marginBottom": 20}),

@@ -132,7 +132,6 @@ dash.register_page(
     layout=layout
 )
 
-print(dash.page_registry)
 
 @callback(
     Output("fl_content", "children"),
