@@ -113,7 +113,8 @@ def create_apd_bar(row, df_prev):
             "zeroline": True,
             "linecolor": "#868e96",
             "ticks": "outside",
-            "tickcolor": "#868e96"
+            "tickcolor": "#868e96",
+            "range": [0, 10]
         },
         legend={
             "orientation": "h",
